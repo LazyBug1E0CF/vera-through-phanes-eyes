@@ -91,7 +91,20 @@
     font-size: clamp(1rem, 2.5vw, 1.4rem);
     color: rgba(255,255,255,0.6);
     line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-prompt {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
     margin-bottom: 2.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    display: inline-block;
+    max-width: 90%;
   }
 
   .hero-scroll-hint {
@@ -339,6 +352,9 @@
         <p class="hero-label">Genshin Impact · Literary Analysis</p>
         <h1 class="hero-title">法大王眼中的少女薇拉</h1>
         <p class="hero-subtitle">对比各大模型对《少女薇拉的忧郁》的研究</p>
+        <div class="hero-prompt">
+          提示词：原神中的《少女薇拉的忧郁》讲了怎样的故事？截至目前最新版本又补充了两个章节，不要遗漏掉
+        </div>
         <div class="hero-scroll-hint">
           <span>向下滚动</span>
           <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
