@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>少女薇拉的忧郁 — 全十二卷故事详解</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #03030a;
+    --deep: #080818;
+    --surface: #0d0d28;
+    --gold: #c8a96e;
+    --gold-bright: #f0cc85;
+    --silver: #8090b0;
+    --dawn: #ff8c69;
+    --nova: #7b9fff;
+    --text: #d8d0c8;
+    --text-dim: #8080a0;
+    --border: rgba(200,169,110,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Noto Serif SC', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── STARFIELD ── */
+  #stars {
+    position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse at 20% 50%, #0a0a2a 0%, #03030a 70%);
+    pointer-events: none;
+  }
+  #stars::before, #stars::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, #ffffff88, transparent),
+      radial-gradient(1px 1px at 25% 8%, #ffffffaa, transparent),
+      radial-gradient(1.5px 1.5px at 40% 30%, #c8a96e99, transparent),
+      radial-gradient(1px 1px at 60% 5%, #ffffff77, transparent),
+      radial-gradient(1px 1px at 75% 20%, #ffffffbb, transparent),
+      radial-gradient(1px 1px at 85% 12%, #7b9fff88, transparent),
+      radial-gradient(1px 1px at 92% 35%, #ffffff66, transparent),
+      radial-gradient(1px 1px at 15% 50%, #ffffff55, transparent),
+      radial-gradient(1.5px 1.5px at 35% 65%, #ffffffaa, transparent),
+      radial-gradient(1px 1px at 55% 55%, #c8a96e77, transparent),
+      radial-gradient(1px 1px at 70% 70%, #ffffff88, transparent),
+      radial-gradient(1px 1px at 80% 60%, #7b9fffaa, transparent),
+      radial-gradient(1px 1px at 5% 80%, #ffffffbb, transparent),
+      radial-gradient(1.5px 1.5px at 20% 90%, #ffffff99, transparent),
+      radial-gradient(1px 1px at 45% 85%, #c8a96e88, transparent),
+      radial-gradient(1px 1px at 65% 92%, #ffffff77, transparent),
+      radial-gradient(1px 1px at 90% 78%, #ffffffaa, transparent),
+      radial-gradient(1px 1px at 3% 40%, #7b9fff99, transparent),
+      radial-gradient(1px 1px at 50% 42%, #ffffff55, transparent),
+      radial-gradient(1.5px 1.5px at 88% 90%, #c8a96eaa, transparent);
+    background-size: 100% 100%;
+  }
+  #stars::after {
+    transform: rotate(45deg) scale(1.5);
+    opacity: 0.4;
+  }
+
+  /* ── LAYOUT ── */
+  main { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    position: relative;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; transform: translate(-50%,-50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%,-50%) scale(1.1); }
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 8vw, 96px);
+    font-weight: 700;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 40%, var(--dawn) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(14px, 2.5vw, 22px);
+    font-style: italic;
+    color: var(--silver);
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 1s 0.7s forwards;
+  }
+  .hero-tagline {
+    font-size: clamp(13px, 1.8vw, 16px);
+    color: var(--text-dim);
+    max-width: 560px;
+    line-height: 2;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+  .hero-badge {
+    display: inline-flex; gap: 24px;
+    margin-top: 40px;
+    opacity: 0;
+    animation: fadeUp 1s 1.1s forwards;
+  }
+  .badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    text-transform: uppercase;
+  }
+
+  .scroll-hint {
+    position: absolute; bottom: 40px;
+    left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0;
+    animation: fadeUp 1s 1.5s forwards;
+  }
+  .scroll-hint span { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--text-dim); }
+  .scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+    50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+    51% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+    100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CHARACTERS SECTION ── */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 48px;
+    line-height: 1.2;
+  }
+
+  /* ── CHARACTER CARDS ── */
+  .chars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    margin-bottom: 64px;
+  }
+  .char-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 32px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    cursor: default;
+  }
+  .char-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+  }
+  .char-card:hover { transform: translateY(-4px); border-color: rgba(200,169,110,0.5); }
+  .char-card:hover::before { transform: translateX(0); }
+  .char-glyph {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-style: italic;
+    color: var(--gold);
+    opacity: 0.15;
+    position: absolute;
+    top: 12px; right: 16px;
+    line-height: 1;
+  }
+  .char-name {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 8px;
+  }
+  .char-role {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    opacity: 0.7;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .char-desc {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text-dim);
+  }
+
+  /* ── WORLD BOX ── */
+  .world-box {
+    background: linear-gradient(135deg, rgba(13,13,40,0.9), rgba(8,8,24,0.9));
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 40px 48px;
+    margin-bottom: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .world-box::after {
+    content: 'DELPHI';
+    position: absolute;
+    right: -20px; top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-family: 'Space Mono', monospace;
+    font-size: 72px;
+    font-weight: 700;
+    color: var(--gold);
+    opacity: 0.04;
+    letter-spacing: 8px;
+  }
+  .world-box p {
+    font-size: 15px;
+    line-height: 2.1;
+    color: var(--text);
+    max-width: 800px;
+  }
+
+  /* ── VOLUME TIMELINE ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 auto;
+    max-width: 1100px;
+  }
+
+  .volumes-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .vol-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  @media (max-width: 700px) { .vol-grid { grid-template-columns: 1fr; } }
+
+  .vol-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .vol-card:hover {
+    border-color: rgba(200,169,110,0.4);
+    background: rgba(15,15,36,0.95);
+  }
+  .vol-card.final {
+    border-color: rgba(200,169,110,0.35);
+    background: linear-gradient(135deg, rgba(20,15,10,0.95), rgba(13,13,28,0.95));
+    grid-column: span 1;
+  }
+  .vol-card.final .vol-num { color: var(--dawn); }
+  .vol-card.final-pair {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: none;
+    padding: 0;
+    background: none;
+  }
+  @media (max-width: 700px) {
+    .vol-card.final-pair { grid-column: 1; grid-template-columns: 1fr; }
+  }
+  .vol-card.final-pair .final {
+    border-color: rgba(240,204,133,0.4);
+  }
+  .vol-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .vol-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  .vol-ref {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--nova);
+    opacity: 0.7;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .vol-text {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text-dim);
+  }
+  .vol-text strong { color: var(--text); font-weight: 600; }
+
+  .new-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--void);
+    background: var(--dawn);
+    padding: 3px 8px;
+    text-transform: uppercase;
+    margin-left: 8px;
+    vertical-align: middle;
+    animation: newGlow 2s ease-in-out infinite;
+  }
+  @keyframes newGlow {
+    0%, 100% { box-shadow: 0 0 4px rgba(255,140,105,0.4); }
+    50% { box-shadow: 0 0 12px rgba(255,140,105,0.9); }
+  }
+
+  /* ── QUOTE ── */
+  .quote-section {
+    padding: 80px 24px;
+    text-align: center;
+    background: linear-gradient(180deg, transparent, rgba(200,169,110,0.03), transparent);
+  }
+  .quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    color: var(--gold);
+    opacity: 0.3;
+    line-height: 0.5;
+    display: block;
+    margin-bottom: 24px;
+  }
+  .quote-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(18px, 3vw, 28px);
+    font-weight: 600;
+    color: var(--gold-bright);
+    max-width: 700px;
+    margin: 0 auto 24px;
+    line-height: 1.7;
+  }
+  .quote-attr {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ── THEME SECTION ── */
+  .theme-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 48px;
+  }
+  @media (max-width: 700px) { .theme-grid { grid-template-columns: 1fr; } }
+  .theme-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 36px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .theme-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+    display: block;
+    filter: saturate(0.7);
+  }
+  .theme-card-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 12px;
+  }
+  .theme-card-text {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text-dim);
+  }
+
+  /* ── CLOSING ── */
+  .closing {
+    padding: 80px 24px;
+    text-align: center;
+    position: relative;
+  }
+  .closing-line {
+    width: 1px; height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    margin: 0 auto 40px;
+  }
+  .closing-text {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 2;
+    max-width: 560px;
+    margin: 0 auto 40px;
+  }
+  .closing-glyph {
+    font-family: 'Playfair Display', serif;
+    font-size: 60px;
+    font-style: italic;
+    color: var(--gold);
+    opacity: 0.25;
+  }
+  .footer-bar {
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+  }
+  .footer-bar p {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  /* ── REVEAL ANIMATION ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── SEPARATOR ORNAMENT ── */
+  .ornament {
+    text-align: center;
+    margin: 0;
+    padding: 16px;
+    color: var(--gold);
+    opacity: 0.3;
+    font-size: 14px;
+    letter-spacing: 8px;
+  }
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-eyebrow">原神 · 游戏内书籍 · 全十二卷完整解析</div>
+    <h1 class="hero-title">少女薇拉的忧郁</h1>
+    <p class="hero-subtitle">Vera's Melancholy</p>
+    <p class="hero-tagline">一部镶嵌在游戏中的微缩科幻文学史<br>从猎户臂到永恒火狱，从告白到宇宙尽头</p>
+    <div class="hero-badge">
+      <span class="badge">共十二卷</span>
+      <span class="badge">含最终双卷</span>
+      <span class="badge">6.5 版本收录</span>
+    </div>
+    <div class="scroll-hint">
+      <span>SCROLL</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- CHARACTERS -->
+  <section class="section reveal">
+    <div class="section-label">CAST · 人物图鉴</div>
+    <h2 class="section-title">四位主角与<br>世界中心德尔斐</h2>
+    <div class="chars-grid">
+      <div class="char-card">
+        <div class="char-glyph">V</div>
+        <div class="char-name">薇拉</div>
+        <div class="char-role">主角 · 平凡少女</div>
+        <div class="char-desc">住在德尔斐的平凡少女，厌倦无聊生活、向往星海冒险。从渴望离开"世界中心"，到发现最远的远方就是有爱人的德尔斐本身。</div>
+      </div>
+      <div class="char-card">
+        <div class="char-glyph">A</div>
+        <div class="char-name">艾克</div>
+        <div class="char-role">贤者 · 时间的回音</div>
+        <div class="char-desc">自称活了一千多年的黑发眼镜少年，家中有一扇可通往宇宙任何角落的门。以"时间的回音"身份见证所有人的成长，唯独自己永远站在时间之外。</div>
+      </div>
+      <div class="char-card">
+        <div class="char-glyph">S</div>
+        <div class="char-name">萨奇</div>
+        <div class="char-role">青梅竹马 · 星际战士</div>
+        <div class="char-desc">薇拉的青梅竹马，暗恋薇拉却不敢表白。失去一只眼睛，历经二十年冒险从瘦弱少年成长为宇宙英雄，只为换回薇拉的一次苏醒。</div>
+      </div>
+      <div class="char-card">
+        <div class="char-glyph">P</div>
+        <div class="char-name">安德罗-巴西利克斯公主</div>
+        <div class="char-role">仙女座第二继承人</div>
+        <div class="char-desc">仙女座星云帝国继承人，拥有超过两百个头衔和九千多颗可居住行星。手掌心长有特殊的嘴巴，取走萨奇眼睛后，再无法爱上第二个人。</div>
+      </div>
+    </div>
+
+    <div class="world-box">
+      <div class="section-label" style="margin-bottom:12px">SETTING · 舞台设定</div>
+      <p>故事发生在名为<strong style="color:var(--gold-bright)">德尔斐</strong>的小镇——取自古希腊神话中的"世界中心"，这一地名在全书中反复回响，成为终极隐喻。骑士霍夫曼向西横跨两个大陆，浮萍夫人向东经过故乡，最终在某处相遇——那个"相遇之处"正是德尔斐。它不过是某位大王都城在球面上的<strong style="color:var(--gold-bright)">对径点</strong>。薇拉突然意识到：「我总说想要离开这里，最终却发现这里才是我最熟悉的地方。」</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- VOLUMES -->
+  <section class="volumes-section reveal">
+    <div class="section-label">VOLUMES · 卷目一览</div>
+    <h2 class="section-title">十二卷故事梗概</h2>
+
+    <div class="vol-grid">
+      <div class="vol-card">
+        <div class="vol-num">VOL.01</div>
+        <div class="vol-title">百亿世界的百亿昼夜</div>
+        <div class="vol-text">薇拉抱怨德尔斐无聊透顶，相信星海另一边有颗住满神灵的星球。前去拜访新住户，推开未上锁的门，却看到艾克从柜子中冲出，身后是沾满蓝色粘液的触手——来自大麦哲伦星云的古神，因艾克取走古神之物而展开追杀。</div>
+      </div>
+      <div class="vol-card">
+        <div class="vol-num">VOL.02</div>
+        <div class="vol-title">我的后院略大于整个宇宙</div>
+        <div class="vol-ref">致敬 · 费尔南多·佩索阿</div>
+        <div class="vol-text">艾克递给薇拉一把菜刀合力对抗触手。他透露柜子是一扇宇宙之门，家中管家"塔尔"是被收服的吃人古城堡恶灵。三人踏上壮阔旅程：「人类的精神还太不成熟，我需要指导你们穿过不思议与童年，最终抵达青春。」</div>
+      </div>
+      <div class="vol-card">
+        <div class="vol-num">VOL.03</div>
+        <div class="vol-title">盗走孤星之人</div>
+        <div class="vol-text">仙女座帝国公主为躲避皇位斗争来到德尔斐，想通过与艾克联姻获得庇护。萨奇看到艾克箱子里满是各星球美人照片，醋意大发：「你拥有那么多星星，为何还要来偷走我的光芒？」</div>
+      </div>
+      <div class="vol-card">
+        <div class="vol-num">VOL.04</div>
+        <div class="vol-title">所有那些熠熠生辉的</div>
+        <div class="vol-ref">致敬 · 威廉·莎士比亚《威尼斯商人》</div>
+        <div class="vol-text">艾克解释照片不过是见证繁星的纪念——「宇宙间熠熠生辉的星星不属于任何人」。萨奇声明自己爱薇拉，公主痛骂萨奇是「懦弱的虫子」，却宣告薇拉已是她认定的朋友。</div>
+      </div>
+      <div class="vol-card">
+        <div class="vol-num">VOL.05</div>
+        <div class="vol-title">众神的路边野餐</div>
+        <div class="vol-ref">致敬 · 斯特鲁伽茨基兄弟《路边野餐》</div>
+        <div class="vol-text">艾克午睡时众魔神趁机混战。公主展现了仙女座种族的恐怖战力——<strong>手掌心长有特殊的嘴巴，用来吞食恋人或战败者的眼球</strong>，吃掉眼睛代表臣服或爱恋。公主轻松击败远古巨龙，对萨奇鄙夷到了极点。</div>
+      </div>
+      <div class="vol-card">
+        <div class="vol-num">VOL.06</div>
+        <div class="vol-title">献给许许多多的节日</div>
+        <div class="vol-ref">致敬 · 村上春树《挪威的森林》扉页</div>
+        <div class="vol-text">小镇迎来节日，薇拉向伙伴们介绍家乡。艾克却指出那个"相遇之处"正是德尔斐——它不过是某位大王都城的<strong>对径点</strong>。薇拉对"远方"的浪漫幻想开始碎裂，在萨奇面前哭了出来。</div>
+      </div>
+      <div class="vol-card">
+        <div class="vol-num">VOL.07</div>
+        <div class="vol-title">星海战记</div>
+        <div class="vol-text">仙女座帝国绑架了公主和萨奇，要挟艾克停止为星系重新点燃恒星的任务。圣王列班宁单枪匹马杀入帝国救回人质，策反圣龙拯救星系——代价是列班宁自身陨落，<strong>血肉与圣龙融合为一体</strong>。</div>
+      </div>
+      <div class="vol-card">
+        <div class="vol-num">VOL.08</div>
+        <div class="vol-title">女孩她们自己</div>
+        <div class="vol-text">艾克向萨奇解释仙女座种族吞食眼球的双重含义——臣服与爱恋——但公主本人分不清这两者的区别。薇拉、公主、圣王列班宁和银河虫群首领"乌尔"举行了一场<strong>女孩们的秘密夜话</strong>，内容成为永远的谜。</div>
+      </div>
+      <div class="vol-card">
+        <div class="vol-num">VOL.09</div>
+        <div class="vol-title">魂断深海古神殿</div>
+        <div class="vol-text">萨奇鼓足所有勇气准备告白——就在这一刻，薇拉的手指被古剑划破，<strong>远古病毒瞬间夺走了她的生命</strong>。艾克给出核心宣言：「只有未来拯救过去，修改过去是没办法拯救没有薇拉的未来的。」</div>
+      </div>
+      <div class="vol-card">
+        <div class="vol-num">VOL.10</div>
+        <div class="vol-title">少女薇拉的忧郁</div>
+        <div class="vol-text">为复活薇拉，三人踏上长达<strong>二十年</strong>的壮绝冒险——拯救了两个星系和银河帝国。薇拉在萨奇怀中苏醒。艾克将萨奇变回少年模样：「很抱歉让你失去了童年。去吧，这是你应得的青春。」薇拉回答：「我们回家吧……现在距离我最远的地方，就是有你的德尔斐。」</div>
+      </div>
+    </div>
+
+    <!-- FINAL TWO VOLUMES -->
+    <div style="margin-top:2px">
+      <div class="vol-card" style="background:linear-gradient(135deg,rgba(25,15,8,0.97),rgba(13,13,28,0.97));border:1px solid rgba(200,169,110,0.35);padding:24px 32px 16px;margin-bottom:2px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div class="vol-num" style="color:var(--dawn);margin:0">最终卷</div>
+          <span class="new-tag">6.5 NEW</span>
+          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:1px">月之六版本新增双卷</span>
+        </div>
+      </div>
+      <div class="vol-card final" style="margin-bottom:2px">
+        <div class="vol-num" style="color:var(--dawn)">FINAL VOL.I</div>
+        <div class="vol-title">在世界中心呼唤爱的野兽</div>
+        <div class="vol-ref">致敬 · 哈兰·埃里森《The Beast That Shouted Love at the Heart of the World》</div>
+        <div class="vol-text">元叙事框架：虞黄衣无法分辨两份手稿哪份是"女主人姐妹从宇宙中捡来的漂流物"，哪份是希尔妲愤而自写的续集。<br><br>聚焦<strong>艾克的视角</strong>。公主透露她已取走萨奇的眼睛，按照仙女座文化这意味着再无法爱上第二个人——她的计划是等薇拉过完幸福一生后，再把萨奇带回仙女座帝国。<br><br>最终场景：<strong>艾克在满月与漫天星空下俯瞰德尔斐，摘下眼镜擦拭泪水，向宇宙大声呼喊：「我爱你们。我爱你们所有人！」</strong>但他的呐喊被夜风带走，消失在幸福的灯火和人类青春的黎明之中——千年旁观者的孤独告白。</div>
+      </div>
+      <div class="vol-card final">
+        <div class="vol-num" style="color:var(--dawn)">FINAL VOL.II</div>
+        <div class="vol-title">在世界中心呼唤爱</div>
+        <div class="vol-ref">致敬 · 片山恭一《在世界中心呼唤爱》</div>
+        <div class="vol-text">聚焦<strong>萨奇与薇拉</strong>的视角。两人订婚，婚期将近。艾克找来萨奇：「这个宇宙濒临毁灭。我们需要你……再来一次冒险。」但他看到订婚戒指，动摇了。萨奇一眼识破：「你一说假话就擦眼镜的习惯从来没变过。」<br><br>萨奇毫不犹豫：「宇宙毁灭了，德尔斐、室女座星云……还有薇拉都会消失。我必须拯救世界。」这一次，薇拉不再渴望同行。<br><br>书中最深情的段落：<strong>除非一个人出发，跨越千山万水、越过大洋江河、行过密林沙漠、见识过所有的玫瑰，最后还能回到身边——这才说明星球是圆的、这里是世界中心、而他是爱你的。</strong><br><br>四季更迭，等待变成漫长的沉默。今天世界没有毁灭——这意味着在宇宙的某个角落，她的朋友们成功了。薇拉低声呢喃：「我爱你们。我爱你们所有人。」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <div class="divider"></div>
+  <section class="quote-section reveal">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">只有未来拯救过去，<br>修改过去是没办法拯救<br>没有薇拉的未来的。</p>
+    <p class="quote-attr">— 艾克 · 卷九「魂断深海古神殿」</p>
+  </section>
+  <div class="divider"></div>
+
+  <!-- THEMES -->
+  <section class="theme-section reveal">
+    <div class="section-label">THEMES · 主题解析</div>
+    <h2 class="section-title">文学野心与<br>深层叙事</h2>
+    <div class="theme-grid">
+      <div class="theme-card">
+        <span class="theme-icon">✦</span>
+        <div class="theme-card-title">文学致敬地图</div>
+        <div class="theme-card-text">书名致敬《凉宫春日的忧郁》，各卷标题密集引用从莎士比亚、佩索阿到村上春树、哈兰·埃里森的经典文学，堪称一部镶嵌在游戏中的微缩科幻文学史。</div>
+      </div>
+      <div class="theme-card">
+        <span class="theme-icon">◈</span>
+        <div class="theme-card-title">元叙事框架</div>
+        <div class="theme-card-text">最终卷引入虞黄衣与希尔妲等角色，以"无法分辨哪份才是真实手稿"的方式构建多重叙事层次。作者"在不同星球一稿多投"的编者注，令虚构与现实的边界刻意模糊。</div>
+      </div>
+      <div class="theme-card">
+        <span class="theme-icon">⋮</span>
+        <div class="theme-card-title">与主线的呼应</div>
+        <div class="theme-card-text">「只有未来拯救过去」与原神主线形成深层联结。最终卷中提到的虞黄衣、希尔妲等角色与深渊相关角色形成暗线关联，暗示这部"小说"可能是某种跨维度的真实记录。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="closing reveal">
+    <div class="closing-line"></div>
+    <p class="quote-text" style="font-size:clamp(16px,2.5vw,22px);margin-bottom:32px">两个最终卷形成精巧的镜像结构——<br>呼喊的艾克，声音消散于夜风；<br>呼唤的薇拉，用信念守候世界中心。<br>同一句「我爱你们」，两种截然不同的温度。</p>
+    <div class="closing-glyph">∞</div>
+  </section>
+
+  <div class="footer-bar">
+    <p>VERA'S MELANCHOLY · GENSHIN IMPACT · VERSION 6.5 · 月之六 · 全十二卷</p>
+  </div>
+
+</main>
+
+<script>
+  // Intersection Observer for reveal animations
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // Subtle parallax on starfield
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    document.getElementById('stars').style.transform = `translateY(${y * 0.15}px)`;
+  }, { passive: true });
+</script>
+</body>
+</html>

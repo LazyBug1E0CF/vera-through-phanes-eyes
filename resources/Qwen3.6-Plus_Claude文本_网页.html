@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《少女薇拉的忧郁》全十二卷完整故事详解</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.16/index.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.0.16/400.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.0.16/700.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.0.16/400.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.0.16/700.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-deep:#0a0e1a;
+  --bg-card:#121833;
+  --bg-card-hover:#1a2244;
+  --accent-gold:#d4a855;
+  --accent-blue:#6a9bfa;
+  --accent-purple:#a77cf7;
+  --text-primary:#e8e6f0;
+  --text-secondary:#9a96a8;
+  --text-muted:#6b6680;
+  --border-color:rgba(166,148,200,0.15);
+  --glow-gold:rgba(212,168,85,0.25);
+  --glow-blue:rgba(106,155,250,0.25);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Noto Sans SC','Inter',sans-serif;
+  background:var(--bg-deep);
+  color:var(--text-primary);
+  line-height:1.8;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* Stars Background */
+.stars-container{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;overflow:hidden;
+}
+.star{
+  position:absolute;border-radius:50%;
+  background:#fff;
+  animation:twinkle var(--dur) ease-in-out infinite alternate;
+}
+@keyframes twinkle{0%{opacity:var(--min-op);transform:scale(0.8)}100%{opacity:var(--max-op);transform:scale(1.2)}}
+
+/* Floating Nebula */
+.nebula{
+  position:fixed;border-radius:50%;
+  filter:blur(80px);
+  opacity:0.08;
+  pointer-events:none;z-index:0;
+}
+.nebula-1{top:10%;left:-5%;width:600px;height:600px;background:var(--accent-purple);animation:drift 30s ease-in-out infinite}
+.nebula-2{top:40%;right:-10%;width:500px;height:500px;background:var(--accent-blue);animation:drift 25s ease-in-out infinite reverse}
+.nebula-3{bottom:5%;left:30%;width:400px;height:400px;background:var(--accent-gold);animation:drift 35s ease-in-out infinite}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-20px)}}
+
+/* Header */
+.hero{
+  position:relative;z-index:1;
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:2rem;
+}
+.hero-subtitle{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(0.85rem,2vw,1.1rem);
+  color:var(--accent-gold);
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  margin-bottom:1.5rem;
+  opacity:0;animation:fadeUp 1s 0.2s forwards;
+}
+.hero-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(2rem,6vw,4.5rem);
+  font-weight:700;
+  background:linear-gradient(135deg,#fff 0%,var(--accent-gold) 50%,var(--accent-purple) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:1rem;
+  opacity:0;animation:fadeUp 1s 0.4s forwards;
+  text-shadow:0 0 60px var(--glow-gold);
+}
+.hero-english{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(0.9rem,2vw,1.3rem);
+  color:var(--text-secondary);
+  font-style:italic;
+  margin-bottom:2rem;
+  opacity:0;animation:fadeUp 1s 0.6s forwards;
+}
+.hero-desc{
+  max-width:680px;
+  font-size:clamp(0.9rem,1.8vw,1.05rem);
+  color:var(--text-secondary);
+  line-height:2;
+  opacity:0;animation:fadeUp 1s 0.8s forwards;
+}
+.scroll-indicator{
+  position:absolute;bottom:2rem;
+  opacity:0;animation:fadeUp 1s 1.2s forwards;
+  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+  color:var(--text-muted);font-size:0.8rem;letter-spacing:0.2em;
+}
+.scroll-arrow{
+  width:20px;height:20px;border-right:2px solid var(--text-muted);
+  border-bottom:2px solid var(--text-muted);
+  transform:rotate(45deg);animation:scrollBounce 2s infinite;
+}
+@keyframes scrollBounce{0%,100%{transform:translateY(0) rotate(45deg)}50%{transform:translateY(8px) rotate(45deg)}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* Navigation */
+.nav{
+  position:fixed;top:0;left:0;width:100%;
+  padding:1rem 2rem;z-index:100;
+  background:rgba(10,14,26,0.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border-color);
+  transition:transform 0.3s;
+}
+.nav.hidden{transform:translateY(-100%)}
+.nav-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{
+  font-family:'Noto Serif SC',serif;
+  font-size:1.1rem;color:var(--accent-gold);
+  font-weight:700;white-space:nowrap;
+}
+.nav-links{display:flex;gap:0.3rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{
+  padding:0.4rem 0.8rem;border-radius:20px;
+  font-size:0.78rem;color:var(--text-secondary);
+  text-decoration:none;white-space:nowrap;
+  transition:all 0.3s;border:1px solid transparent;
+}
+.nav-link:hover,.nav-link.active{
+  color:var(--accent-gold);
+  background:rgba(212,168,85,0.1);
+  border-color:var(--border-color);
+}
+
+/* Table of Contents Sidebar */
+.toc{
+  position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);
+  z-index:50;display:flex;flex-direction:column;gap:0.4rem;
+}
+.toc-dot{
+  width:10px;height:10px;border-radius:50%;
+  border:2px solid var(--text-muted);
+  background:transparent;cursor:pointer;
+  transition:all 0.3s;position:relative;
+}
+.toc-dot.active{border-color:var(--accent-gold);background:var(--accent-gold)}
+.toc-dot::after{
+  content:attr(data-label);
+  position:absolute;right:20px;top:50%;transform:translateY(-50%);
+  font-size:0.7rem;color:var(--text-muted);
+  white-space:nowrap;opacity:0;transition:opacity 0.3s;
+  pointer-events:none;
+}
+.toc-dot:hover::after{opacity:1}
+
+/* Main Content */
+.main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 1.5rem 6rem}
+
+/* Section */
+.section{
+  margin:5rem 0;
+  opacity:0;transform:translateY(40px);
+  transition:all 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.section.visible{opacity:1;transform:translateY(0)}
+
+/* Section Header */
+.section-header{
+  margin-bottom:2.5rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid var(--border-color);
+  position:relative;
+}
+.section-header::before{
+  content:'';position:absolute;bottom:-1px;left:0;
+  width:60px;height:2px;
+  background:linear-gradient(90deg,var(--accent-gold),transparent);
+}
+.section-label{
+  font-family:'Inter',sans-serif;
+  font-size:0.75rem;letter-spacing:0.25em;
+  color:var(--accent-purple);text-transform:uppercase;
+  margin-bottom:0.5rem;display:block;
+}
+.section-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(1.4rem,3.5vw,2.2rem);
+  font-weight:700;
+  line-height:1.4;
+  margin-bottom:0.3rem;
+}
+.section-english{
+  font-family:'Inter',sans-serif;
+  font-size:0.85rem;color:var(--text-muted);
+  font-style:italic;
+}
+
+/* Content Blocks */
+.content{
+  font-size:clamp(0.92rem,1.6vw,1.02rem);
+  line-height:2;
+  color:var(--text-primary);
+}
+.content p{margin-bottom:1.5rem}
+.content strong{color:var(--accent-gold);font-weight:700}
+.content em{color:var(--accent-blue);font-style:normal}
+
+/* Volume Cards */
+.volume-card{
+  background:var(--bg-card);
+  border:1px solid var(--border-color);
+  border-radius:16px;
+  padding:2rem;margin:2rem 0;
+  position:relative;overflow:hidden;
+  transition:all 0.4s;
+}
+.volume-card:hover{
+  background:var(--bg-card-hover);
+  border-color:rgba(166,148,200,0.25);
+  transform:translateY(-2px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+.volume-card::before{
+  content:'';position:absolute;top:0;left:0;
+  width:100%;height:3px;
+  background:linear-gradient(90deg,var(--accent-gold),var(--accent-purple),var(--accent-blue));
+}
+.volume-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent-gold),#c49844);
+  color:var(--bg-deep);font-weight:700;font-size:0.9rem;
+  margin-bottom:1rem;
+}
+.volume-card-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:1.3rem;font-weight:700;
+  margin-bottom:0.3rem;
+}
+.volume-ref{
+  font-size:0.82rem;color:var(--text-muted);
+  margin-bottom:1.2rem;
+  font-style:italic;
+}
+.volume-card .content{margin-top:0}
+.volume-card .content p{margin-bottom:1rem}
+
+/* Two Column Layout for Final Volumes */
+.dual-volumes{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0;
+}
+@media(max-width:768px){.dual-volumes{grid-template-columns:1fr}}
+.dual-card{
+  background:var(--bg-card);
+  border:1px solid var(--border-color);
+  border-radius:16px;padding:2rem;
+  position:relative;overflow:hidden;
+  transition:all 0.4s;
+}
+.dual-card:hover{
+  background:var(--bg-card-hover);
+  transform:translateY(-3px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+.dual-card.eka::before{
+  content:'';position:absolute;top:0;left:0;
+  width:100%;height:3px;
+  background:linear-gradient(90deg,var(--accent-purple),#5a3abf);
+}
+.dual-card.ekb::before{
+  content:'';position:absolute;top:0;left:0;
+  width:100%;height:3px;
+  background:linear-gradient(90deg,var(--accent-blue),#3a7bd4);
+}
+.dual-badge{
+  display:inline-block;
+  padding:0.25rem 0.8rem;border-radius:20px;
+  font-size:0.75rem;letter-spacing:0.1em;
+  margin-bottom:1rem;
+}
+.eka .dual-badge{background:rgba(167,124,247,0.15);color:var(--accent-purple)}
+.ekb .dual-badge{background:rgba(106,155,250,0.15);color:var(--accent-blue)}
+.dual-card-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:1.15rem;font-weight:700;
+  margin-bottom:0.8rem;
+}
+
+/* Quote Block */
+.quote-block{
+  background:rgba(212,168,85,0.05);
+  border-left:3px solid var(--accent-gold);
+  padding:1.5rem 2rem;
+  margin:1.5rem 0;border-radius:0 8px 8px 0;
+  font-style:italic;
+  color:var(--accent-gold);
+  position:relative;
+}
+.quote-block::before{
+  content:'"';font-family:'Noto Serif SC',serif;
+  font-size:3rem;position:absolute;top:-0.5rem;left:0.5rem;
+  color:rgba(212,168,85,0.2);line-height:1;
+}
+.quote-block p{position:relative;z-index:1}
+
+/* Highlight Box */
+.highlight-box{
+  background:linear-gradient(135deg,rgba(167,124,247,0.08),rgba(106,155,250,0.08));
+  border:1px solid rgba(167,124,247,0.2);
+  border-radius:12px;padding:1.5rem 2rem;
+  margin:1.5rem 0;
+}
+.highlight-box p{margin-bottom:0.5rem}
+.highlight-box strong{color:var(--accent-purple)}
+
+/* Divider */
+.divider{
+  display:flex;align-items:center;gap:1rem;
+  margin:3rem 0;color:var(--text-muted);
+}
+.divider::before,.divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-color),transparent);
+}
+.divider-icon{font-size:1.2rem;color:var(--accent-gold)}
+
+/* Footer */
+.footer{
+  text-align:center;padding:4rem 2rem 3rem;
+  border-top:1px solid var(--border-color);
+  color:var(--text-muted);font-size:0.85rem;
+}
+.footer-brand{
+  font-family:'Noto Serif SC',serif;
+  font-size:1.2rem;color:var(--accent-gold);
+  margin-bottom:0.5rem;
+}
+.footer-desc{max-width:500px;margin:0 auto;line-height:1.8}
+
+/* Responsive */
+@media(max-width:768px){
+  .toc{display:none}
+  .nav-links{padding-bottom:0.3rem}
+  .nav-logo{font-size:0.95rem}
+  .volume-card{padding:1.5rem}
+  .section{margin:3rem 0}
+  .quote-block{padding:1.2rem 1.5rem}
+}
+
+/* Animations */
+.fade-in{
+  opacity:0;transform:translateY(20px);
+  transition:all 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.fade-in-delay-1{transition-delay:0.1s}
+.fade-in-delay-2{transition-delay:0.2s}
+.fade-in-delay-3{transition-delay:0.3s}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg-deep)}
+::-webkit-scrollbar-thumb{background:rgba(167,124,247,0.3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(167,124,247,0.5)}
+
+/* Selection */
+::selection{background:rgba(212,168,85,0.3);color:#fff}
+
+/* Editor Note */
+.editor-note{
+  background:rgba(106,155,250,0.06);
+  border:1px dashed rgba(106,155,250,0.3);
+  border-radius:12px;padding:1.5rem 2rem;
+  margin:2rem 0;
+}
+.editor-note-label{
+  font-size:0.75rem;letter-spacing:0.15em;
+  color:var(--accent-blue);margin-bottom:0.5rem;
+  text-transform:uppercase;
+}
+.editor-note p{color:var(--text-secondary);font-size:0.92rem;font-style:italic}
+
+/* Theme Toggle */
+.theme-pulse{
+  position:fixed;bottom:2rem;right:2rem;z-index:50;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--bg-card);border:1px solid var(--border-color);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all 0.3s;
+  font-size:1.1rem;
+}
+.theme-pulse:hover{
+  background:var(--bg-card-hover);
+  border-color:var(--accent-gold);
+  transform:scale(1.1);
+}
+
+/* Mirror Diagram */
+.mirror-diagram{
+  display:flex;align-items:center;justify-content:center;
+  gap:2rem;margin:2rem 0;flex-wrap:wrap;
+}
+.mirror-side{
+  text-align:center;padding:1.5rem 2rem;
+  border-radius:12px;flex:1;min-width:200px;max-width:300px;
+}
+.mirror-side.left{background:rgba(167,124,247,0.08);border:1px solid rgba(167,124,247,0.2)}
+.mirror-side.right{background:rgba(106,155,250,0.08);border:1px solid rgba(106,155,250,0.2)}
+.mirror-side-title{font-family:'Noto Serif SC',serif;font-size:1rem;font-weight:700;margin-bottom:0.5rem}
+.mirror-side.left .mirror-side-title{color:var(--accent-purple)}
+.mirror-side.right .mirror-side-title{color:var(--accent-blue)}
+.mirror-side-desc{font-size:0.85rem;color:var(--text-secondary)}
+.mirror-center{font-size:1.5rem;color:var(--accent-gold)}
+
+@media(max-width:768px){
+  .mirror-diagram{flex-direction:column}
+  .mirror-center{transform:rotate(90deg)}
+}
+</style>
+</head>
+<body>
+
+<div class="stars-container" id="starsContainer"></div>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div class="nebula nebula-3"></div>
+
+<!-- Navigation -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <div class="nav-logo">少女薇拉的忧郁</div>
+    <div class="nav-links" id="navLinks">
+      <a href="#intro" class="nav-link active">概述</a>
+      <a href="#characters" class="nav-link">角色</a>
+      <a href="#vol1-5" class="nav-link">卷一至五</a>
+      <a href="#vol6-8" class="nav-link">卷六至八</a>
+      <a href="#vol9-10" class="nav-link">卷九至十</a>
+      <a href="#final" class="nav-link">最终卷</a>
+      <a href="#epilogue" class="nav-link">尾声</a>
+    </div>
+  </div>
+</nav>
+
+<!-- TOC Dots -->
+<div class="toc" id="tocDots">
+  <div class="toc-dot active" data-target="intro" data-label="概述"></div>
+  <div class="toc-dot" data-target="characters" data-label="角色"></div>
+  <div class="toc-dot" data-target="vol1-5" data-label="卷一至五"></div>
+  <div class="toc-dot" data-target="vol6-8" data-label="卷六至八"></div>
+  <div class="toc-dot" data-target="vol9-10" data-label="卷九至十"></div>
+  <div class="toc-dot" data-target="final" data-label="最终卷"></div>
+  <div class="toc-dot" data-target="epilogue" data-label="尾声"></div>
+</div>
+
+<!-- Hero -->
+<header class="hero" id="hero">
+  <div class="hero-subtitle">GENSHIN IMPACT · LITERARY MASTERPIECE</div>
+  <h1 class="hero-title">少女薇拉的忧郁</h1>
+  <p class="hero-english">Vera's Melancholy</p>
+  <p class="hero-desc">
+    全书共<strong>十二卷</strong>——前十卷在1.0与1.1版本实装，两卷"最终卷"于2026年4月上线的"月之六"版本（6.5版本）新增。
+    这部作品以蒙德地区流行小说的形式，讲述了少女薇拉与伙伴们横跨星海的成长史诗，
+    其核心命题——<em>"只有未来拯救过去"</em>——与原神主线剧情形成深层呼应。
+  </p>
+  <div class="scroll-indicator">
+    <span>向下探索</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+
+  <!-- Intro -->
+  <section class="section" id="intro">
+    <div class="section-header">
+      <span class="section-label">Introduction</span>
+      <h2 class="section-title">概述</h2>
+      <span class="section-english">The Story Behind the Story</span>
+    </div>
+    <div class="content">
+      <p>
+        《少女薇拉的忧郁》（英文名<em>Vera's Melancholy</em>）是原神中最具文学野心的虚构小说。
+        书名致敬轻小说《凉宫春日的忧郁》，各卷标题则密集引用从莎士比亚到哈兰·埃里森的经典文学，
+        堪称一部<strong>镶嵌在游戏中的微缩科幻文学史</strong>。
+      </p>
+      <div class="highlight-box">
+        <p>核心命题：<strong>"只有未来拯救过去"</strong>——与原神主线剧情中的命运回环形成深层呼应。</p>
+        <p>全书共<strong>十二卷</strong>：前十卷实装于1.0与1.1版本，最终卷两篇于6.5版本「月之六」新增。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- Characters -->
+  <section class="section" id="characters">
+    <div class="section-header">
+      <span class="section-label">Characters</span>
+      <h2 class="section-title">四位主角与"世界中心"德尔斐</h2>
+      <span class="section-english">Four Heroes and the "Center of the World" — Delphi</span>
+    </div>
+    <div class="content">
+      <p>
+        故事发生在名为<strong>德尔斐</strong>的小镇——取自古希腊神话中的"世界中心"，
+        这一地名在全书中反复回响，成为终极隐喻。
+      </p>
+    </div>
+    <div class="dual-volumes">
+      <div class="volume-card">
+        <div class="volume-card-title">薇拉</div>
+        <p style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:1rem;">Vera · 女主角</p>
+        <div class="content">
+          <p>住在德尔斐的平凡少女，厌倦无聊生活、向往星海冒险。她相信星海的另一边有一颗住满神灵的星球能实现所有愿望。</p>
+        </div>
+      </div>
+      <div class="volume-card">
+        <div class="volume-card-title">萨奇</div>
+        <p style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:1rem;">Sachi · 青梅竹马</p>
+        <div class="content">
+          <p>薇拉的竹马，暗恋薇拉却不敢表白。在二十年的冒险中从瘦弱少年成长为宇宙英雄，最终失去一只眼睛。</p>
+        </div>
+      </div>
+      <div class="volume-card">
+        <div class="volume-card-title">艾克</div>
+        <p style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:1rem;">Eck · 千年贤者</p>
+        <div class="content">
+          <p>自称活了一千多年的黑发眼镜少年贤者，家中有一扇可通往宇宙任何角落的门。作为"时间的回音"，他永远站在时间之外。</p>
+        </div>
+      </div>
+      <div class="volume-card">
+        <div class="volume-card-title">安德罗-巴西利克斯公主</div>
+        <p style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:1rem;">Princess · 仙女座继承人</p>
+        <div class="content">
+          <p>仙女座星云帝国的第二顺位继承人，拥有超过两百个头衔和<strong>九千多颗可居住行星</strong>，却为躲避皇位争夺来到这个小镇。</p>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <p>
+        四人之间错综复杂的感情线——<strong>薇拉追逐艾克、萨奇暗恋薇拉、公主觊觎艾克却对萨奇产生微妙情愫</strong>——构成了全书的情感张力。
+      </p>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- Vol 1-5 -->
+  <section class="section" id="vol1-5">
+    <div class="section-header">
+      <span class="section-label">Volume 1 – 5</span>
+      <h2 class="section-title">卷一至卷五：从无聊小镇到星海冒险</h2>
+      <span class="section-english">From a Boring Town to the Sea of Stars</span>
+    </div>
+
+    <!-- Vol 1 -->
+    <div class="volume-card fade-in">
+      <div class="volume-num">壹</div>
+      <div class="volume-card-title">百亿世界的百亿昼夜</div>
+      <div class="volume-ref">The First Volume</div>
+      <div class="content">
+        <p>薇拉抱怨德尔斐无聊透顶，她相信星海的另一边有一颗住满神灵的星球能实现所有愿望。得知镇上来了新住户后，她前去拜访——推开未上锁的门，却看到<strong>戴眼镜的少年艾克从柜子中冲出</strong>，身后是沾满蓝色粘液的触手。</p>
+        <p>这些触手来自<strong>大麦哲伦星云的古神</strong>，因艾克取走了古神之物而展开追杀。薇拉就此卷入了"一生中最大的危机"。</p>
+      </div>
+    </div>
+
+    <!-- Vol 2 -->
+    <div class="volume-card fade-in">
+      <div class="volume-num">贰</div>
+      <div class="volume-card-title">我的后院略大于整个宇宙</div>
+      <div class="volume-ref">化用葡萄牙诗人佩索阿："我的心略大于整个宇宙"</div>
+      <div class="content">
+        <p>艾克递给薇拉一把菜刀合力对抗触手——虽然薇拉不小心在他背上砍了两刀。艾克透露柜子是<strong>一扇宇宙之门</strong>，他已存在千年，家中管家"塔尔"是被收服的吃人古城堡恶灵。</p>
+        <div class="quote-block">
+          <p>人类的精神还太不成熟，我需要指导你们穿过不思议与童年，最终抵达青春。</p>
+        </div>
+        <p>三人从猎户臂到永恒火狱，从时间洪流到星辰之海，踏上壮阔旅程。</p>
+      </div>
+    </div>
+
+    <!-- Vol 3 -->
+    <div class="volume-card fade-in">
+      <div class="volume-num">叁</div>
+      <div class="volume-card-title">盗走孤星之人</div>
+      <div class="volume-ref">Volume Three</div>
+      <div class="content">
+        <p><strong>仙女座帝国公主</strong>为躲避皇位斗争来到德尔斐，想通过与艾克联姻获得庇护。萨奇看到艾克箱子里满是各星球美人照片，醋意大发：</p>
+        <div class="quote-block">
+          <p>你拥有那么多星星，为何还要来偷走我的光芒？</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vol 4 -->
+    <div class="volume-card fade-in">
+      <div class="volume-num">肆</div>
+      <div class="volume-card-title">所有那些熠熠生辉的</div>
+      <div class="volume-ref">引自莎士比亚《威尼斯商人》："闪光的不一定都是金子"</div>
+      <div class="content">
+        <p>艾克解释照片不过是见证繁星的纪念——"宇宙间熠熠生辉的星星不属于任何人"。</p>
+        <p>萨奇鼓起勇气声明自己爱薇拉，要帮公主追艾克。公主反而痛骂萨奇是<em>"懦弱的虫子"</em>，同时宣告薇拉已是她认定的朋友，拒绝把薇拉"交给"他。</p>
+      </div>
+    </div>
+
+    <!-- Vol 5 -->
+    <div class="volume-card fade-in">
+      <div class="volume-num">伍</div>
+      <div class="volume-card-title">众神的路边野餐</div>
+      <div class="volume-ref">致敬苏联经典科幻小说《路边野餐》</div>
+      <div class="content">
+        <p>爆发了一场荒诞战斗——艾克午睡时，手下收服的众魔神趁机混战，连薇拉三人也被卷入。</p>
+        <p>公主展现了仙女座支配种族的恐怖战力：她们的<strong>手掌心长有特殊的嘴巴，用来吞食恋人或战败者的眼球</strong>——吃掉眼睛代表臣服或爱恋。</p>
+        <p>公主轻松击败远古巨龙，但对投降认怂的萨奇鄙夷到了极点。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- Vol 6-8 -->
+  <section class="section" id="vol6-8">
+    <div class="section-header">
+      <span class="section-label">Volume 6 – 8</span>
+      <h2 class="section-title">卷六至卷八：节日、战争与女孩们的秘密</h2>
+      <span class="section-english">Festival, War, and the Girls' Secret</span>
+    </div>
+
+    <!-- Vol 6 -->
+    <div class="volume-card fade-in">
+      <div class="volume-num">陆</div>
+      <div class="volume-card-title">献给许许多多的节日</div>
+      <div class="volume-ref">致敬村上春树《挪威的森林》扉页"献给许许多多的祭日"</div>
+      <div class="content">
+        <p>全书的<strong>抒情转折点</strong>。小镇迎来节日，薇拉终于能向伙伴们介绍自己的家乡。她讲述本地传说：骑士霍夫曼向西横跨两个大陆，浮萍夫人向东经过故乡，最终在某处相遇。</p>
+        <p>艾克却指出那个"相遇之处"正是德尔斐——它不过是某位大王都城在球面上的<strong>对径点</strong>。</p>
+        <div class="quote-block">
+          <p>我总说想要离开这里，最终却发现这里才是我最熟悉的地方。</p>
+        </div>
+        <p>这一刻，薇拉对"远方"的浪漫幻想开始碎裂。她在萨奇面前哭了出来。</p>
+      </div>
+    </div>
+
+    <!-- Vol 7 -->
+    <div class="volume-card fade-in">
+      <div class="volume-num">柒</div>
+      <div class="volume-card-title">星海战记</div>
+      <div class="volume-ref">Volume Seven</div>
+      <div class="content">
+        <p>将故事推入<strong>太空歌剧的高潮</strong>。仙女座帝国绑架了公主和萨奇，要挟艾克停止为星系重新点燃恒星的任务。</p>
+        <p>原来艾克此行的真正使命是受<strong>圣王列班宁</strong>委托，拯救薇拉家乡星系即将熄灭的恒星。圣王列班宁亲自出马，单枪匹马杀入帝国救回人质，策反了帝国的圣龙拯救星系——代价是列班宁自身陨落，血肉与圣龙融合为一体。</p>
+      </div>
+    </div>
+
+    <!-- Vol 8 -->
+    <div class="volume-card fade-in">
+      <div class="volume-num">捌</div>
+      <div class="volume-card-title">女孩她们自己</div>
+      <div class="volume-ref">Volume Eight</div>
+      <div class="content">
+        <p>聚焦情感暗流。艾克向萨奇解释仙女座种族吞食眼球的<strong>双重含义</strong>——<em>臣服与爱恋</em>——但公主本人分不清这两者的区别。在她眼中，所有人都只是"不会在继承战中伤害她的人"，无关爱恨。</p>
+        <p>与此同时，薇拉、公主、圣王列班宁和银河虫群首领"乌尔"举行了一场<strong>女孩们的秘密夜话</strong>，内容成为永远的谜——</p>
+        <div class="quote-block">
+          <p>男孩不许参加女孩子的睡前派对！</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- Vol 9-10 -->
+  <section class="section" id="vol9-10">
+    <div class="section-header">
+      <span class="section-label">Volume 9 – 10</span>
+      <h2 class="section-title">卷九与卷十：死亡、二十年冒险与青春的代价</h2>
+      <span class="section-english">Death, Twenty Years, and the Price of Youth</span>
+    </div>
+
+    <!-- Vol 9 -->
+    <div class="volume-card fade-in">
+      <div class="volume-num">玖</div>
+      <div class="volume-card-title">魂断深海古神殿</div>
+      <div class="volume-ref">Volume Nine — The Most Tragic Turning Point</div>
+      <div class="content">
+        <p>全书<strong>最悲痛的转折</strong>。随着年岁增长，薇拉出落得愈发美丽，萨奇却仍矮小柔弱。他鼓足所有勇气准备告白——就在这一刻，薇拉的手指被卷一中艾克从古神那里取来的古剑划破。</p>
+        <p><strong>远古病毒瞬间夺走了她的生命。</strong></p>
+        <p>公主哀求艾克倒回时间。艾克给出了全书最核心的哲学宣言：</p>
+        <div class="quote-block">
+          <p>只有未来拯救过去，修改过去是没办法拯救没有薇拉的未来的。</p>
+        </div>
+        <p>他又补充了一段来自<strong>白银时代的神话</strong>：那个时代人类的童年极其漫长，长达两百多年，而短暂的成年期充满苦难。</p>
+        <div class="quote-block">
+          <p>对你们而言，童年已经结束了，可青春还遥不可及。</p>
+        </div>
+        <p>这一卷以编者注预告——接下来是<strong>"没有薇拉的《少女薇拉的忧郁》"</strong>。</p>
+      </div>
+    </div>
+
+    <!-- Vol 10 -->
+    <div class="volume-card fade-in">
+      <div class="volume-num">拾</div>
+      <div class="volume-card-title">少女薇拉的忧郁</div>
+      <div class="volume-ref">Volume Ten — The Original Finale</div>
+      <div class="content">
+        <p>原作的<strong>终章高潮</strong>。为复活薇拉，萨奇、艾克和公主踏上了长达<strong>二十年</strong>的壮绝冒险——从地狱大君杀到吞噬恒星的星际巨龙，顺手拯救了两个星系和银河帝国，消灭了四种危险的星际虫类。</p>
+        <p>薇拉终于在萨奇怀中苏醒。此时的萨奇已<strong>失去一只眼睛</strong>，从瘦弱少年成长为宇宙英雄。</p>
+        <p>艾克自称"时间的回音"，将萨奇变回出发那天的少年模样，四人回到了启程之日。</p>
+        <div class="quote-block">
+          <p>很抱歉让你失去了童年。去吧，这是你应得的青春。</p>
+        </div>
+        <p>萨奇终于向薇拉告白：</p>
+        <div class="quote-block">
+          <p>我为了你经历了宇宙间的一切不可思议，没有你，我无法到达青春。</p>
+        </div>
+        <p>薇拉的回答：</p>
+        <div class="quote-block">
+          <p>已经可以了。我们回家吧……<strong>现在距离我最远的地方，就是有你的德尔斐。</strong></p>
+        </div>
+        <div class="editor-note">
+          <div class="editor-note-label">✎ 编者注</div>
+          <p>作者拿着前九卷的版税花天酒地去了。如果你们在星海诸界里找到他，麻烦催一下稿。</p>
+        </div>
+        <p>故事在此<strong>悬而未决</strong>。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- Final Volumes -->
+  <section class="section" id="final">
+    <div class="section-header">
+      <span class="section-label">Final Volumes</span>
+      <h2 class="section-title">最终卷：双结局</h2>
+      <span class="section-english">Two Final Volumes — Mirror Endings</span>
+    </div>
+
+    <div class="content">
+      <p>
+        2026年4月"月之六"版本新增的两个最终卷，形成了<strong>精巧的镜像结构</strong>。
+        同一句"我爱你们"，两种截然不同的情感温度。
+      </p>
+    </div>
+
+    <div class="mirror-diagram">
+      <div class="mirror-side left">
+        <div class="mirror-side-title">最终卷·版本一</div>
+        <div class="mirror-side-desc">艾克·孤独的千年旁观者<br>声音消散于夜风</div>
+      </div>
+      <div class="mirror-center">⟷</div>
+      <div class="mirror-side right">
+        <div class="mirror-side-title">最终卷·版本二</div>
+        <div class="mirror-side-desc">薇拉·回到起点的平凡少女<br>用信念守候世界中心</div>
+      </div>
+    </div>
+
+    <!-- Final Vol A -->
+    <div class="dual-volumes">
+      <div class="dual-card eka fade-in">
+        <div class="dual-badge">最终卷 · 版本一</div>
+        <div class="dual-card-title">在世界中心呼唤爱的野兽</div>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem;font-style:italic">
+          致敬哈兰·埃里森 1968 年科幻短篇<br>
+          "The Beast That Shouted Love at the Heart of the World"
+        </p>
+        <div class="content">
+          <p>聚焦<strong>艾克的视角</strong>。冒险尘埃落定后的日常生活中，艾克独自喝着苹果汁，公主前来拜访。</p>
+          <p>公主透露她曾<strong>取走萨奇的眼睛</strong>——按照仙女座种族的文化，这意味着她无法再爱上第二个人。她的计划是等薇拉过完幸福一生、自然老去之后，再把萨奇带回仙女座帝国。而萨奇经历了二十年冒险中的无数强化改造，<strong>实际上已无法真正衰老</strong>，只能"用暮年去表演青春"。</p>
+          <p>艾克面对自己作为"时间的回音"的宿命——每一次操纵时间，回音就会增多，他需要与另一个"自己"决斗融合。</p>
+          <div class="quote-block">
+            <p>故事最终场景：<strong>艾克在满月与漫天星空下俯瞰德尔斐，摘下眼镜擦拭泪水，向宇宙大声呼喊——</strong></p>
+            <p style="font-size:1.1rem;margin-top:0.8rem">我爱你们。我爱你们所有人！</p>
+          </div>
+          <p>但德尔斐只是一个普通小镇，他的呐喊被夜风带走，消失在幸福的灯火和人类青春的黎明之中。</p>
+          <p>这是一个<strong>千年旁观者的孤独告白</strong>——他见证了所有人的成长与幸福，唯独自己永远站在时间之外。</p>
+        </div>
+      </div>
+
+      <!-- Final Vol B -->
+      <div class="dual-card ekb fade-in">
+        <div class="dual-badge">最终卷 · 版本二</div>
+        <div class="dual-card-title">在世界中心呼唤爱</div>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem;font-style:italic">
+          致敬片山恭一 2001 年日本小说<br>
+          "在世界中心呼唤爱"
+        </p>
+        <div class="content">
+          <p>以<strong>萨奇与薇拉</strong>为核心视角。萨奇和薇拉已到了订婚年龄，<strong>婚期将近</strong>。</p>
+          <p>艾克找到萨奇，神情凝重："这个宇宙濒临毁灭。我们需要你……再来一次冒险，就像以前一样。"但他看到了两人手上的<strong>订婚戒指</strong>，动摇了——"不对，我忘了，你只是凡人了。"</p>
+          <p>萨奇一眼识破：<em>"你一说假话就擦眼镜的习惯从来没变过。"</em></p>
+          <p>艾克最终坦白：萨奇是最强大的星际战士，没有他会少<strong>三成胜算</strong>。</p>
+          <div class="quote-block">
+            <p>萨奇毫不犹豫地做出了选择：<strong>"宇宙毁灭了，德尔斐、室女座星云……还有薇拉都会消失。我必须拯救世界。"</strong></p>
+          </div>
+          <p>这一次，薇拉不再渴望同行——"失而复得之后"她已心满意足。书中写下了全系列最深情的段落：</p>
+          <div class="quote-block">
+            <p><strong>除非一个人出发，跨越千山万水、越过大洋江河、行过密林沙漠、见识过所有的玫瑰，最后还能回到身边——这才说明星球是圆的、这里是世界中心、而他是爱你的。</strong></p>
+          </div>
+          <p>四季更迭，等待变成了漫长的沉默。但薇拉活在那份沉默中，坚定地相信萨奇正在回来的路上。因为今天世界没有毁灭——这意味着在宇宙的某个角落，她的朋友们成功了。</p>
+          <div class="quote-block">
+            <p>最终薇拉低声呢喃：<strong>"我爱你们。我爱你们所有人。"</strong></p>
+          </div>
+          <p>在世界的中心，一声温柔的爱的呼唤。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-note">
+      <div class="editor-note-label">✎ 元叙事框架</div>
+      <p>角色<strong>虞黄衣</strong>无法分辨手中两份手稿哪一份是"女主人姐妹从宇宙中捡来的漂流物"，哪一份是<strong>希尔妲</strong>"因为对原结局感到愤怒而自己写的"——因为两份都是手写稿。</p>
+      <p style="margin-top:0.5rem">编者注提到，作者品德堪忧，同一套故事在不同星球反复投稿、一稿多投，可能因此被某个宇宙帝国追杀。</p>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- Epilogue -->
+  <section class="section" id="epilogue">
+    <div class="section-header">
+      <span class="section-label">Epilogue</span>
+      <h2 class="section-title">"只有未来拯救过去"——超越小说的游戏宇宙回响</h2>
+      <span class="section-english">Echoes Beyond the Novel</span>
+    </div>
+    <div class="content">
+      <p>
+        全书最核心的哲学命题——<strong>"只有未来拯救过去"</strong>——与原神主线剧情深度联结。
+        戴因斯雷布在PV中的台词几乎是直接呼应：
+      </p>
+      <div class="quote-block">
+        <p>未来拯救过去，年长者与年幼者同血相残——这是世间回环的命运。</p>
+      </div>
+      <p>
+        最终卷中提到的<strong>虞黄衣</strong>和<strong>希尔妲</strong>两位角色、"女主人的姐妹从宇宙中捡来的漂流物"等元叙事线索，
+        也与深渊相关角色<strong>希尔克（Skirk）</strong>的角色故事形成暗线关联——
+        苏尔塔洛吉曾在宇宙漂泊时发现"一片散发故乡气息的碎片"。
+      </p>
+      <p>
+        这些伏笔暗示，《少女薇拉的忧郁》在原神世界中可能不仅仅是一本小说，而是<strong>某种跨越维度的真实记录</strong>。
+      </p>
+
+      <div class="highlight-box" style="margin-top:2.5rem">
+        <p>从卷一到最终卷，这部作品完成了一个<strong>完美的叙事闭环</strong>：</p>
+        <p>薇拉从渴望离开"世界中心"德尔斐，到发现最远的远方就是有爱人的德尔斐本身——</p>
+        <div class="quote-block" style="border-left-color:var(--accent-blue);color:var(--accent-blue);background:rgba(106,155,250,0.05)">
+          <p style="font-size:1.15rem"><strong>真正的冒险不是去往远方，而是穿越整个宇宙后依然能回到起点的人。</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-brand">少女薇拉的忧郁</div>
+  <p class="footer-desc">
+    Vera's Melancholy · A Genshin Impact Literary Masterpiece<br>
+    全书十二卷 · 蒙德地区最受欢迎小说
+  </p>
+  <p style="margin-top:1.5rem;font-size:0.75rem;color:var(--text-muted)">
+    本页面为粉丝制作的内容整理，版权归miHoYo / HoYoverse所有
+  </p>
+</footer>
+
+<!-- Scroll to top -->
+<div class="theme-pulse" id="scrollTop" title="回到顶部">↑</div>
+
+<script>
+(function(){
+  // Generate stars
+  var starsBox=document.getElementById('starsContainer');
+  var starCount=180;
+  for(var s=0;s<starCount;s++){
+    var starEl=document.createElement('div');
+    starEl.className='star';
+    var size=Math.random()*2+0.5;
+    starEl.style.width=size+'px';
+    starEl.style.height=size+'px';
+    starEl.style.left=Math.random()*100+'%';
+    starEl.style.top=Math.random()*100+'%';
+    starEl.style.setProperty('--dur',(Math.random()*4+2)+'s');
+    starEl.style.setProperty('--min-op',(Math.random()*0.3+0.1).toFixed(2));
+    starEl.style.setProperty('--max-op',(Math.random()*0.5+0.5).toFixed(2));
+    starEl.style.animationDelay=(Math.random()*5)+'s';
+    starsBox.appendChild(starEl);
+  }
+
+  // Scroll animations
+  var sections=document.querySelectorAll('.section');
+  var fadeEls=document.querySelectorAll('.fade-in');
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+      }
+    });
+  },{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+
+  sections.forEach(function(sec){observer.observe(sec)});
+  fadeEls.forEach(function(el){observer.observe(el)});
+
+  // Nav show/hide
+  var nav=document.getElementById('mainNav');
+  var lastScroll=0;
+  window.addEventListener('scroll',function(){
+    var current=window.pageYOffset;
+    if(current>100){
+      if(current>lastScroll+5){
+        nav.classList.add('hidden');
+      }else{
+        nav.classList.remove('hidden');
+      }
+    }else{
+      nav.classList.remove('hidden');
+    }
+    lastScroll=current;
+  },{passive:true});
+
+  // Active nav link
+  var navLinks=document.querySelectorAll('.nav-link');
+  var sectionIds=['intro','characters','vol1-5','vol6-8','vol9-10','final','epilogue'];
+  window.addEventListener('scroll',function(){
+    var scrollPos=window.pageYOffset+200;
+    sectionIds.forEach(function(id,idx){
+      var el=document.getElementById(id);
+      if(el){
+        var top=el.offsetTop;
+        var bottom=top+el.offsetHeight;
+        if(scrollPos>=top&&scrollPos<bottom){
+          navLinks.forEach(function(link){link.classList.remove('active')});
+          navLinks[idx].classList.add('active');
+          // Update TOC dots
+          document.querySelectorAll('.toc-dot').forEach(function(dot,i){
+            dot.classList.toggle('active',i===idx);
+          });
+        }
+      }
+    });
+  },{passive:true});
+
+  // TOC dot click
+  document.querySelectorAll('.toc-dot').forEach(function(dot){
+    dot.addEventListener('click',function(){
+      var targetId=this.getAttribute('data-target');
+      var target=document.getElementById(targetId);
+      if(target){
+        target.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    });
+  });
+
+  // Scroll to top
+  var scrollBtn=document.getElementById('scrollTop');
+  scrollBtn.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+  window.addEventListener('scroll',function(){
+    scrollBtn.style.opacity=window.pageYOffset>400?'1':'0';
+  },{passive:true});
+
+  // Hero scroll indicator fade
+  var heroIndicator=document.querySelector('.scroll-indicator');
+  window.addEventListener('scroll',function(){
+    if(window.pageYOffset>100){
+      heroIndicator.style.opacity='0';
+    }else{
+      heroIndicator.style.opacity='1';
+    }
+  },{passive:true});
+
+})();
+</script>
+</body>
+</html>
+

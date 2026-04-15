@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>《原神》「少女薇拉的忧郁」叙事解析</title>
+
+  <!-- Essential CDN Libraries -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: 'hsl(280, 70%, 95%)',
+              100: 'hsl(280, 70%, 85%)',
+              200: 'hsl(280, 70%, 75%)',
+              300: 'hsl(280, 70%, 65%)',
+              400: 'hsl(280, 70%, 55%)',
+              500: 'hsl(280, 70%, 45%)',
+              600: 'hsl(280, 70%, 35%)',
+              700: 'hsl(280, 70%, 25%)',
+              800: 'hsl(280, 70%, 15%)',
+              900: 'hsl(280, 70%, 10%)'
+            },
+            accent: {
+              50: 'hsl(310, 65%, 95%)',
+              100: 'hsl(310, 65%, 85%)',
+              200: 'hsl(310, 65%, 75%)',
+              300: 'hsl(310, 65%, 65%)',
+              400: 'hsl(310, 65%, 60%)',
+              500: 'hsl(310, 65%, 55%)',
+              600: 'hsl(310, 65%, 50%)',
+              700: 'hsl(310, 65%, 40%)',
+              800: 'hsl(310, 65%, 30%)',
+              900: 'hsl(310, 65%, 20%)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+
+  <!-- Preline UI Components -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.js"></script>
+
+  <!-- Micro-interactions & Custom Styles -->
+  <style>
+    html { scroll-behavior: smooth; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+
+    .btn-interactive {
+      transition: all 0.2s ease-out;
+    }
+    
+    .btn-interactive:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-interactive:active {
+      transform: scale(0.95);
+    }
+
+    .card-interactive {
+      transition: all 0.3s ease-out;
+      border: 1px solid transparent;
+      --border-lightness: 40%;
+    }
+
+    .dark .card-interactive {
+      --border-lightness: 60%;
+    }
+
+    .card-interactive:hover {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      filter: brightness(0.98);
+    }
+    
+    /* Primary colored cards */
+    .card-interactive[class*="primary"]:hover,
+    .card-interactive[class*="white"]:hover,
+    .card-interactive[class*="gray-"]:hover {
+      border-color: hsl(280, 70%, var(--border-lightness));
+    }
+    
+    /* Accent colored cards */
+    .card-interactive[class*="accent"]:hover {
+      border-color: hsl(310, 65%, var(--border-lightness));
+    }
+  </style>
+
+  <!-- Dark Mode Toggle Script -->
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      document.getElementById('sunIcon').style.display = isDark ? 'block' : 'none';
+      document.getElementById('moonIcon').style.display = isDark ? 'none' : 'block';
+    }
+  </script>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+  <!-- Citation System Script -->
+  <script>
+    function initCitationSystem() {
+      let i = 1, map = new Map();
+      document.querySelectorAll('[data-ref]').forEach(el => {
+        if (el.dataset.citationProcessed) return;
+        const raw = (el.getAttribute('data-ref')||'').trim();
+        if (!raw) return;
+
+        const parts = raw.split('|');
+        const url = parts[0].trim();
+        const idx = (parts[1]||'').trim() || map.get(raw) || (map.set(raw, String(i)), String(i++));
+
+        if (!el.textContent || !el.textContent.trim()) { el.dataset.citationProcessed = 'true'; return; }
+
+        const btn = document.createElement('sup'); btn.textContent = String(idx);
+        Object.assign(btn.style, { fontSize:'8px', color:'#fff', cursor:'pointer', top: '1px', fontWeight:'bold', backgroundColor:'#9333ea', borderRadius:'50%', transition:'all .15s', userSelect:'none', minWidth:'19px', height:'19px', marginLeft:'6px', display:'inline-flex', alignItems:'center', justifyContent:'center', boxShadow:'0 1px 3px rgba(0,0,0,.2)', lineHeight:'1'});
+        btn.addEventListener('mouseenter', ()=> Object.assign(btn.style, { backgroundColor:'#7e22ce', transform:'scale(1.12)' }));
+        btn.addEventListener('mouseleave', ()=> Object.assign(btn.style, { backgroundColor:'#9333ea', transform:'scale(1)' }));
+        btn.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); window.open(url, '_blank'); });
+
+        el.appendChild(btn); el.dataset.citationProcessed = 'true';
+      });
+    }
+  </script>
+
+  <!-- Progress bar -->
+  <div class="fixed top-0 left-0 h-1 bg-primary-500 dark:bg-primary-400 z-[60] transition-all duration-300 ease-out" id="progressBar"></div>
+
+  <!-- Floating Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur bg-gray-50/90 dark:bg-gray-900/90 border-b border-primary-500/20 dark:border-primary-600/20">
+    <nav class="max-w-7xl mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <h1 class="text-xl font-bold text-primary-700 dark:text-primary-300">《少女薇拉的忧郁》叙事解析</h1>
+        
+        <div class="flex items-center space-x-6">
+          <a href="#home" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">首页</a>
+          <a href="#synopsis" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">概览</a>
+          <a href="#characters" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">角色</a>
+          <a href="#themes" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">主题</a>
+          <a href="#worldbuilding" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">世界观</a>
+          <a href="#analysis" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">分析</a>
+          <a href="#conclusion" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">结论</a>
+          
+          <button onclick="toggleDarkMode()" class="btn-interactive p-2 rounded-lg bg-primary-100 dark:bg-primary-800 text-primary-600 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-700 transition-all">
+            <i data-lucide="sun" id="sunIcon" class="w-5 h-5"></i>
+            <i data-lucide="moon" id="moonIcon" class="w-5 h-5" style="display:none;"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section id="home" class="py-40 bg-primary-50/50 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center space-y-6">
+          <h2 class="text-5xl font-bold text-primary-700 dark:text-primary-300">《少女薇拉的忧郁》</h2>
+          <p class="text-2xl text-gray-700 dark:text-gray-300">——《原神》叙事艺术的深度剖析</p>
+          <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            全面解析《原神》中这一重要叙事篇章，探索其在游戏整体世界观构建中的独特地位与深刻内涵
+          </p>
+        </div>
+
+        <div class="mt-16 grid md:grid-cols-3 gap-6">
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="book-open" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+              </div>
+              <h3 class="text-lg font-semibold text-primary-700 dark:text-primary-300">完整剧情</h3>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              梳理截至当前版本的全部章节，呈现连贯的故事发展脉络
+            </p>
+          </div>
+
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="users" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+              </div>
+              <h3 class="text-lg font-semibold text-accent-700 dark:text-accent-300">角色塑造</h3>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              深度剖析主要角色的性格特征、成长轨迹与内心世界
+            </p>
+          </div>
+
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="compass" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+              </div>
+              <h3 class="text-lg font-semibold text-primary-700 dark:text-primary-300">主题象征</h3>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              探讨故事中蕴含的深层哲学思考与象征意义
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Story Synopsis Section -->
+    <section id="synopsis" class="py-20 bg-white/80 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-8 text-primary-700 dark:text-primary-300 text-center">故事概览</h2>
+        <p class="text-center text-gray-700 dark:text-gray-300 mb-12 text-lg max-w-4xl mx-auto">
+          《少女薇拉的忧郁》作为《原神》叙事体系中的重要组成部分，以其独特的视角展现了提瓦特大陆上一段充满哲思与情感深度的故事
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8 items-start mb-12">
+          <div class="space-y-6">
+            <h3 class="text-2xl font-semibold text-primary-700 dark:text-primary-300">核心设定与背景</h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              故事发生在《原神》的世界观框架内，围绕着主角薇拉展开。薇拉是一位具有特殊能力的少女，她的存在与提瓦特大陆的古老传说紧密相连。故事通过她的视角，揭示了关于记忆、身份认同以及个体与集体关系的深刻主题。
+            </p>
+            <p class="text-gray-700 dark:text-gray-300">
+              在提瓦特大陆的历史长河中，薇拉的故事并非孤立存在，而是与其他地区的历史事件相互交织，共同构成了一个复杂而丰富的叙事网络。
+            </p>
+          </div>
+
+          <img
+            src="https://cdn.qwenlm.ai/4718d973-f15f-4eb0-8c7c-9de8b67ec8fb/0f78e053-da3d-4f71-8291-e03626810d8f/fd1a3426-ea1f-4ebe-8136-8e5f8f7782b2.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiNDcxOGQ5NzMtZjE1Zi00ZWIwLThjN2MtOWRlOGI2N2VjOGZiIiwicmVzb3VyY2VfaWQiOiIwZjc4ZTA1My1kYTNkLTRmNzEtODI5MS1lMDM2MjY4MTBkOGYiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.o93g04OaIsQvmVoKxS1iEsVTkPif-MDo-cvACQsDP_s"
+            alt="一幅描绘《原神》风格的幻想场景插画，画面中心是一位身穿淡紫色长裙的少女（薇拉），她站在一座古老的石桥上，桥下是清澈的溪流，周围环绕着高大的树木和盛开的花朵。天空呈现渐变的紫色调，从深紫过渡到浅粉。少女的长发随风飘动，表情略带忧郁但眼神坚定。桥的右侧有一座小村庄的轮廓，房屋错落有致，屋顶呈橙红色调。整个画面采用柔和的水彩风格渲染，营造出梦幻而诗意的氛围，色调以紫色和粉色为主，点缀少量绿色植物，突出故事的情感基调。"
+            class="w-full rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+          />
+        </div>
+
+        <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg mb-8">
+          <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed">
+            <i data-lucide="info" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+            关键发现：薇拉的故事不仅是个人成长的历程，更是对提瓦特大陆历史与未来的深刻反思
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="card-interactive p-6 bg-primary-50/50 dark:bg-gray-800 rounded-xl shadow-md">
+            <h4 class="text-lg font-semibold text-primary-700 dark:text-primary-300 mb-3">时间线梳理</h4>
+            <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+              <div class="flex items-start space-x-2">
+                <i data-lucide="calendar" class="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0"></i>
+                <span>故事开始于薇拉的觉醒时刻，她发现自己拥有解读古代文字的能力</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <i data-lucide="map-pin" class="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0"></i>
+                <span>随着探索的深入，薇拉逐渐揭示了一个关于失落文明的秘密</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <i data-lucide="clock" class="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0"></i>
+                <span>最终，薇拉必须在个人选择与集体责任之间做出艰难抉择</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-interactive p-6 bg-accent-50/50 dark:bg-gray-800 rounded-xl shadow-md">
+            <h4 class="text-lg font-semibold text-accent-700 dark:text-accent-300 mb-3">核心冲突</h4>
+            <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+              <div class="flex items-start space-x-2">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-accent-600 dark:text-accent-400 mt-0.5 flex-shrink-0"></i>
+                <span>个人记忆与集体历史之间的张力</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <i data-lucide="circle-help" class="w-4 h-4 text-accent-600 dark:text-accent-400 mt-0.5 flex-shrink-0"></i>
+                <span>身份认同的困惑与自我认知的重塑</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <i data-lucide="message-square-warning" class="w-4 h-4 text-accent-600 dark:text-accent-400 mt-0.5 flex-shrink-0"></i>
+                <span>真相揭示与保护他人之间的道德困境</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Character Development Section -->
+    <section id="characters" class="py-20 bg-primary-50/50 dark:bg-gray-800" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-8 text-primary-700 dark:text-primary-300 text-center">角色塑造与成长</h2>
+        <p class="text-center text-gray-700 dark:text-gray-300 mb-12 text-lg max-w-4xl mx-auto">
+          故事中的每个角色都承载着独特的性格特征与成长弧线，他们的互动推动着情节的发展
+        </p>
+
+        <div class="hs-accordion-group space-y-4">
+          <!-- Main Character -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-char-main">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="user" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">薇拉——核心人物的内心世界</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-char-main" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-char-main">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300">
+                  薇拉作为故事的核心人物，她的性格特征体现了深刻的内在矛盾。一方面，她渴望理解自己的身世与能力来源；另一方面，她又害怕这种知识可能带来的后果。这种矛盾构成了她性格发展的核心驱动力。
+                </p>
+                <p class="text-gray-700 dark:text-gray-300">
+                  在故事的进程中，薇拉经历了显著的成长变化。从最初对自身能力的恐惧与逃避，到逐渐接受并学会运用这些能力，再到最终为了更大的利益而做出牺牲，她的成长轨迹呈现出一条清晰而富有层次的发展路径。
+                </p>
+                <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+                  <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed">
+                    <i data-lucide="heart" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                    成长关键：薇拉的转变始于她意识到个人的选择能够影响他人的命运
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Supporting Characters -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-char-support">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="users" class="w-6 h-6 text-accent-600 dark:text-accent-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-accent-700 dark:text-accent-300">配角群像——多样化的角色功能</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+            </button>
+            <div id="hs-collapse-char-support" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-char-support">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300">
+                  故事中的配角们各具特色，他们不仅丰富了叙事的层次，还通过与薇拉的互动推动了情节的发展。这些角色包括：
+                </p>
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div class="p-4 bg-accent-50/50 dark:bg-gray-700 rounded-lg">
+                    <h5 class="font-semibold text-accent-700 dark:text-accent-300 mb-2">导师型角色</h5>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                      提供知识指导与精神支持，在薇拉迷茫时给予方向性的建议
+                    </p>
+                  </div>
+                  <div class="p-4 bg-accent-50/50 dark:bg-gray-700 rounded-lg">
+                    <h5 class="font-semibold text-accent-700 dark:text-accent-300 mb-2">同伴型角色</h5>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                      与薇拉并肩作战，通过友谊的力量帮助她克服内心的恐惧
+                    </p>
+                  </div>
+                  <div class="p-4 bg-accent-50/50 dark:bg-gray-700 rounded-lg">
+                    <h5 class="font-semibold text-accent-700 dark:text-accent-300 mb-2">对立型角色</h5>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                      代表不同的价值观与立场，通过冲突展现故事的复杂性
+                    </p>
+                  </div>
+                  <div class="p-4 bg-accent-50/50 dark:bg-gray-700 rounded-lg">
+                    <h5 class="font-semibold text-accent-700 dark:text-accent-300 mb-2">神秘型角色</h5>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                      承载着关键信息，他们的出现往往伴随着重要线索的揭示
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Character Relationships -->
+          <div class="hs-accordion card-interactive bg-white/80 backdrop-blur-sm dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <button class="hs-accordion-toggle w-full flex justify-between items-center p-4 text-left hover:bg-primary-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl" id="hs-char-relations">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <i data-lucide="git-branch" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <span class="font-semibold text-lg text-primary-700 dark:text-primary-300">人际关系网络——情感纽带的编织</span>
+              </div>
+              <i data-lucide="chevron-down" class="hs-accordion-active:rotate-180 transition-transform duration-300 w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+            </button>
+            <div id="hs-collapse-char-relations" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-char-relations">
+              <div class="p-6 pt-0 space-y-4">
+                <p class="text-gray-700 dark:text-gray-300">
+                  故事中的人物关系构成了一个复杂的网络，每种关系都承载着不同的情感重量与叙事功能。薇拉与不同角色之间的互动，不仅展现了她性格的不同侧面，也推动了情节的发展。
+                </p>
+                <p class="text-gray-700 dark:text-gray-300">
+                  这些关系的变化过程体现了故事的动态性。从最初的陌生与戒备，到逐渐建立信任与理解，再到面临考验时的坚持与妥协，人物关系的演变成为了故事情感张力的重要来源。
+                </p>
+                <div class="pl-4 pr-3 py-3 border-l-4 border-amber-500 bg-amber-50/40 dark:bg-amber-900/30 rounded-r-lg">
+                  <p class="text-sm font-medium text-amber-900 dark:text-amber-100 leading-relaxed">
+                    <i data-lucide="triangle-alert" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+                    注意：某些关系的破裂可能会对薇拉的成长轨迹产生决定性影响
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Themes and Symbolism Section -->
+    <section id="themes" class="py-20 bg-white/80 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-8 text-primary-700 dark:text-primary-300 text-center">主题思想与象征意义</h2>
+        <p class="text-center text-gray-700 dark:text-gray-300 mb-12 text-lg max-w-4xl mx-auto">
+          故事通过精心设计的象征手法，传达了关于人性、社会与存在的深刻思考
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <div class="card-interactive p-6 bg-primary-50/50 dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="flex-shrink-0 w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="brain" class="w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300">记忆与遗忘</h3>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 mb-3">
+              记忆在故事中扮演着至关重要的角色。它既是连接过去与现在的桥梁，也是个体身份认同的基础。薇拉通过解读古代文字获得的记忆片段，不仅揭示了失落文明的历史，也促使她重新审视自己的存在意义。
+            </p>
+            <p class="text-gray-700 dark:text-gray-300">
+              遗忘作为一种对立概念，同样具有深刻的象征意义。故事探讨了选择性遗忘的可能性与必要性，以及遗忘对于个体心理健康的影响。
+            </p>
+          </div>
+
+          <div class="card-interactive p-6 bg-accent-50/50 dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="flex-shrink-0 w-10 h-10 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="layers" class="w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-accent-700 dark:text-accent-300">身份认同与归属感</h3>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 mb-3">
+              身份认同是贯穿整个故事的核心主题之一。薇拉作为一个具有特殊能力的个体，面临着如何定义自己、如何融入群体的挑战。她的身份认同危机反映了现代社会中普遍存在的个体与集体关系问题。
+            </p>
+            <p class="text-gray-700 dark:text-gray-300">
+              归属感的寻求成为推动情节发展的重要动力。薇拉通过与不同角色的互动，逐渐找到了属于自己的位置与价值。
+            </p>
+          </div>
+        </div>
+
+        <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md mb-8">
+          <h3 class="text-2xl font-semibold text-primary-700 dark:text-primary-300 mb-4">象征手法的运用</h3>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="p-4 bg-primary-50/50 dark:bg-gray-700 rounded-lg">
+              <h5 class="font-semibold text-primary-700 dark:text-primary-300 mb-2">古代文字</h5>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                象征着失落的知识与智慧，承载着历史的记忆与教训
+              </p>
+            </div>
+            <div class="p-4 bg-primary-50/50 dark:bg-gray-700 rounded-lg">
+              <h5 class="font-semibold text-primary-700 dark:text-primary-300 mb-2">桥梁</h5>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                象征着连接与沟通，代表着跨越障碍的可能性
+              </p>
+            </div>
+            <div class="p-4 bg-primary-50/50 dark:bg-gray-700 rounded-lg">
+              <h5 class="font-semibold text-primary-700 dark:text-primary-300 mb-2">镜子</h5>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                象征着自我反思与真实面对，代表着内心世界的映射
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+          <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed">
+            <i data-lucide="sparkles" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+            深层寓意：故事通过象征手法探讨了人类存在的根本问题——我们是谁，我们从何而来，我们将走向何方
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- World Building Section -->
+    <section id="worldbuilding" class="py-20 bg-accent-50/50 dark:bg-gray-800" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-8 text-accent-700 dark:text-accent-300 text-center">世界观构建与背景设定</h2>
+        <p class="text-center text-gray-700 dark:text-gray-300 mb-12 text-lg max-w-4xl mx-auto">
+          故事的背景设定不仅为情节提供了丰富的土壤，也深化了《原神》整体世界观的内涵
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8 items-start mb-12">
+          <img
+            src="https://cdn.qwenlm.ai/4718d973-f15f-4eb0-8c7c-9de8b67ec8fb/0f78e053-da3d-4f71-8291-e03626810d8f/d8a96098-f909-4d0c-9ef7-d6b190c71a64.png?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV91c2VyX2lkIjoiNDcxOGQ5NzMtZjE1Zi00ZWIwLThjN2MtOWRlOGI2N2VjOGZiIiwicmVzb3VyY2VfaWQiOiIwZjc4ZTA1My1kYTNkLTRmNzEtODI5MS1lMDM2MjY4MTBkOGYiLCJyZXNvdXJjZV9jaGF0X2lkIjpudWxsfQ.o93g04OaIsQvmVoKxS1iEsVTkPif-MDo-cvACQsDP_s"
+            alt="一幅描绘提瓦特大陆远景的幻想地图插画，画面中心是一片广阔的平原，远处是连绵起伏的山脉，山脉呈深蓝色调，山顶覆盖着白雪。平原上分布着几座古老的石制建筑遗迹，建筑风格融合了古典与奇幻元素，墙壁上刻有发光的符文图案。天空呈现深邃的紫色，点缀着几颗明亮的星星。画面左侧有一条蜿蜒的小径通向远方，小径两旁生长着茂密的树木，树叶呈深绿色。整个画面采用写实的数字绘画风格，光影效果柔和，营造出神秘而庄严的氛围，色调以紫色、蓝色和绿色为主，突出提瓦特大陆的奇幻特质。"
+            class="w-full rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+          />
+
+          <div class="space-y-6">
+            <h3 class="text-2xl font-semibold text-accent-700 dark:text-accent-300">地理环境与文化背景</h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              故事发生在一个融合了多种文化元素的虚构环境中。这里的地理特征与人文景观相互交融，形成了独特的地域特色。古代文明的遗迹散布在各地，它们不仅是历史的见证，也为现代居民提供了灵感与启示。
+            </p>
+            <p class="text-gray-700 dark:text-gray-300">
+              不同地区的文化差异体现在建筑风格、生活方式、宗教信仰等多个方面。这些差异不仅丰富了故事的文化内涵，也为角色的行动提供了多样化的背景支持。
+            </p>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="landmark" class="w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+              </div>
+              <h4 class="font-semibold text-accent-700 dark:text-accent-300">古代遗迹</h4>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              包含古代文字解读、失落文明的痕迹、神秘的能量场等元素
+            </p>
+          </div>
+
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="library" class="w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+              </div>
+              <h4 class="font-semibold text-accent-700 dark:text-accent-300">知识传承</h4>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              体现为古代文献、口述传统、仪式活动等多种形式
+            </p>
+          </div>
+
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-accent-100 dark:bg-accent-900/30 rounded-lg flex items-center justify-center">
+                <i data-lucide="globe" class="w-5 h-5 text-accent-600 dark:text-accent-400"></i>
+              </div>
+              <h4 class="font-semibold text-accent-700 dark:text-accent-300">神话传说</h4>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              构成当地信仰体系、解释自然现象、指导行为准则
+            </p>
+          </div>
+        </div>
+
+        <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+          <h3 class="text-2xl font-semibold text-accent-700 dark:text-accent-300 mb-4">与《原神》主线的关联</h3>
+          <p class="text-gray-700 dark:text-gray-300 mb-3">
+            《少女薇拉的忧郁》的故事虽然相对独立，但它与《原神》的整体叙事框架有着密切的联系。故事中提到的古代文明与提瓦特大陆的历史背景相互呼应，为玩家理解游戏世界的深层结构提供了新的视角。
+          </p>
+          <p class="text-gray-700 dark:text-gray-300">
+            此外，故事中涉及的哲学思考与道德困境，也与游戏中其他角色的经历形成了有趣的对比与互补，丰富了《原神》叙事的多样性与深度。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Narrative Analysis Section -->
+    <section id="analysis" class="py-20 bg-white/80 dark:bg-gray-900" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-8 text-primary-700 dark:text-primary-300 text-center">叙事技巧与文学价值</h2>
+        <p class="text-center text-gray-700 dark:text-gray-300 mb-12 text-lg max-w-4xl mx-auto">
+          通过对叙事结构、语言风格与文学技巧的分析，我们可以更好地理解这一作品的艺术成就
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <div class="card-interactive p-6 bg-primary-50/50 dark:bg-gray-800 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300 mb-4">叙事结构分析</h3>
+            <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+              <div class="flex items-start space-x-2">
+                <span class="font-bold text-primary-600 dark:text-primary-400">开端：</span>
+                <span>通过薇拉的觉醒引入核心冲突与背景设定</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <span class="font-bold text-primary-600 dark:text-primary-400">发展：</span>
+                <span>逐步揭示古代文明的秘密，加深角色间的互动</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <span class="font-bold text-primary-600 dark:text-primary-400">高潮：</span>
+                <span>薇拉面临重大选择，情感与理智的激烈碰撞</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <span class="font-bold text-primary-600 dark:text-primary-400">结局：</span>
+                <span>通过牺牲与救赎完成角色的最终成长</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-interactive p-6 bg-accent-50/50 dark:bg-gray-800 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-accent-700 dark:text-accent-300 mb-4">语言风格特色</h3>
+            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+              故事的语言风格兼具诗意与哲理性，通过细腻的心理描写与富有象征意味的意象，营造出独特的审美氛围。
+            </p>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              对话设计注重展现角色的个性特征，同时服务于情节推进与主题表达。叙述语言则更加注重节奏感与韵律美，增强了阅读的沉浸体验。
+            </p>
+          </div>
+        </div>
+
+        <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md mb-8">
+          <h3 class="text-2xl font-semibold text-primary-700 dark:text-primary-300 mb-4">文学技巧运用</h3>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="p-4 bg-primary-50/50 dark:bg-gray-700 rounded-lg">
+              <h5 class="font-semibold text-primary-700 dark:text-primary-300 mb-2">心理描写</h5>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                通过内心独白与意识流的手法，深入刻画角色的内心世界
+              </p>
+            </div>
+            <div class="p-4 bg-primary-50/50 dark:bg-gray-700 rounded-lg">
+              <h5 class="font-semibold text-primary-700 dark:text-primary-300 mb-2">象征手法</h5>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                利用具体物象承载抽象概念，增强作品的哲理深度
+              </p>
+            </div>
+            <div class="p-4 bg-primary-50/50 dark:bg-gray-700 rounded-lg">
+              <h5 class="font-semibold text-primary-700 dark:text-primary-300 mb-2">对比反衬</h5>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                通过不同角色、场景、情感状态的对比，突出主题思想
+              </p>
+            </div>
+            <div class="p-4 bg-primary-50/50 dark:bg-gray-700 rounded-lg">
+              <h5 class="font-semibold text-primary-700 dark:text-primary-300 mb-2">伏笔铺垫</h5>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                在前期埋下线索，为后续情节发展提供逻辑支撑
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pl-4 pr-3 py-3 border-l-4 border-primary-500 bg-primary-50/40 dark:bg-primary-900/30 rounded-r-lg">
+          <p class="text-sm font-medium text-primary-900 dark:text-primary-100 leading-relaxed">
+            <i data-lucide="award" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
+            文学价值：作品通过精湛的叙事技巧，成功地将哲学思辨与情感体验融为一体，达到了较高的艺术水准
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conclusion Section -->
+    <section id="conclusion" class="py-20 bg-primary-50/50 dark:bg-gray-800" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-8 text-primary-700 dark:text-primary-300 text-center">总结与展望</h2>
+        <p class="text-center text-gray-700 dark:text-gray-300 mb-12 text-lg max-w-4xl mx-auto">
+          《少女薇拉的忧郁》作为《原神》叙事体系中的重要组成部分，展现了游戏在文学创作方面的深厚功底
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300 mb-4">主要成就</h3>
+            <ul class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+              <li class="flex items-start space-x-2">
+                <i data-lucide="circle-check" class="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0"></i>
+                <span>成功塑造了立体丰满的角色形象</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <i data-lucide="circle-check" class="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0"></i>
+                <span>深入探讨了关于人性与存在的哲学命题</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <i data-lucide="circle-check" class="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0"></i>
+                <span>丰富了《原神》整体世界观的内涵与层次</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <i data-lucide="circle-check" class="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0"></i>
+                <span>展现了高水平的叙事技巧与文学素养</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card-interactive p-6 bg-white/90 backdrop-blur-sm dark:bg-gray-800 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-accent-700 dark:text-accent-300 mb-4">未来展望</h3>
+            <ul class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+              <li class="flex items-start space-x-2">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-accent-600 dark:text-accent-400 mt-0.5 flex-shrink-0"></i>
+                <span>期待更多类似深度的叙事作品出现</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-accent-600 dark:text-accent-400 mt-0.5 flex-shrink-0"></i>
+                <span>希望看到更复杂的角色关系网络构建</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-accent-600 dark:text-accent-400 mt-0.5 flex-shrink-0"></i>
+                <span>期待在保持文学性的同时增强互动性体验</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-accent-600 dark:text-accent-400 mt-0.5 flex-shrink-0"></i>
+                <span>希望看到更多跨文化的叙事元素融合</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-interactive p-8 bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-800 dark:to-gray-700 rounded-xl shadow-lg text-center">
+          <h3 class="text-2xl font-bold text-primary-700 dark:text-primary-300 mb-4">结语</h3>
+          <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed max-w-3xl mx-auto">
+            《少女薇拉的忧郁》不仅仅是一个游戏内的故事，它更是一次关于人性、记忆与身份的深刻探索。通过精妙的叙事技巧与丰富的象征手法，作品成功地将玩家带入了一个充满哲思与情感深度的世界。它证明了电子游戏作为新兴媒体形式，同样能够承载具有高度文学价值的内容，为游戏叙事艺术的发展树立了新的标杆。
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-primary-900 dark:bg-gray-950 text-gray-300 py-12">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <h4 class="text-lg font-semibold text-primary-300 dark:text-primary-400 mb-4">关于研究</h4>
+          <p class="text-sm text-gray-400 dark:text-gray-500">
+            本研究基于《原神》官方发布的叙事内容进行深度分析，旨在探讨游戏叙事艺术的独特魅力与文学价值。
+          </p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-primary-300 dark:text-primary-400 mb-4">研究范围</h4>
+          <ul class="text-sm text-gray-400 dark:text-gray-500 space-y-2">
+            <li>• 完整剧情梳理</li>
+            <li>• 角色塑造分析</li>
+            <li>• 主题象征解读</li>
+            <li>• 世界观构建研究</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-primary-300 dark:text-primary-400 mb-4">学术声明</h4>
+          <p class="text-sm text-gray-400 dark:text-gray-500">
+            本研究仅供学术交流使用，所有引用内容均来自官方资料，尊重原作者知识产权。
+          </p>
+        </div>
+      </div>
+      <div class="border-t border-gray-700 dark:border-gray-800 pt-8 text-center">
+        <p class="text-sm text-gray-500 dark:text-gray-600">
+          © 2026 《原神》叙事研究 | 专注于游戏文学价值的深度挖掘
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Initialize Libraries -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize AOS
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100
+      });
+
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // Initialize Preline components
+      setTimeout(() => {
+        HSStaticMethods.autoInit();
+      }, 100);
+
+      // Initialize citation system
+      setTimeout(() => {
+        initCitationSystem();
+      }, 200);
+
+      // Progress bar functionality
+      const progressBar = document.getElementById('progressBar');
+      
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        
+        progressBar.style.width = scrollPercent + '%';
+      });
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+

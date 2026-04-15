@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《少女薇拉的忧郁》全本叙事结构与提瓦特宇宙学隐喻深度测绘报告</title>
+<style>
+  /* ── 全局重置与基础 ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold:    #c9a84c;
+    --gold-lt: #f0d080;
+    --sky:     #7ec8e3;
+    --sky-dim: #4a8fa8;
+    --deep:    #080c1a;
+    --panel:   rgba(12, 20, 48, 0.85);
+    --border:  rgba(201, 168, 76, 0.35);
+    --text:    #d8d8e8;
+    --muted:   #8888aa;
+    --accent:  #a066cc;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--text);
+    font-family: "Noto Serif SC", "Source Han Serif CN", "STSong", Georgia, serif;
+    line-height: 1.85;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── 星空背景 ── */
+  #starfield {
+    position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse at 20% 40%, #0d1a3a 0%, #080c1a 70%);
+    overflow: hidden;
+    pointer-events: none;
+  }
+  #starfield::before, #starfield::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 5%,  #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 25%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 10%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 20%, #fff 0%, transparent 100%),
+      radial-gradient(2px 2px at 15% 55%, rgba(255,255,200,.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 65%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 45%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 60%, #fff 0%, transparent 100%),
+      radial-gradient(2px 2px at 90% 75%, rgba(200,200,255,.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5%  80%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 90%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 85%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 92%, #fff 0%, transparent 100%),
+      radial-gradient(2px 2px at 75% 35%, rgba(180,220,255,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 70%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 40%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 92% 50%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 2%  40%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 18% 72%, #fff 0%, transparent 100%);
+  }
+  #starfield::after {
+    background-image:
+      radial-gradient(1px 1px at 22% 33%, rgba(255,255,255,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 48% 18%, rgba(255,255,255,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 73% 28%, rgba(255,255,255,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 88% 42%, rgba(255,255,255,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 12% 62%, rgba(255,255,255,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 37% 77%, rgba(255,255,255,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 58% 88%, rgba(255,255,255,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 82% 83%, rgba(255,255,255,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 3%  22%, rgba(255,255,255,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 97% 15%, rgba(255,255,255,.6) 0%, transparent 100%);
+    animation: twinkle 6s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle {
+    0%   { opacity: 0.4; }
+    100% { opacity: 1.0; }
+  }
+
+  /* 星云光晕 */
+  .nebula {
+    position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.12;
+    pointer-events: none; z-index: 0;
+  }
+  .nebula-1 { width: 600px; height: 400px; background: radial-gradient(circle, #3a0080, transparent); top: -100px; left: -150px; }
+  .nebula-2 { width: 500px; height: 500px; background: radial-gradient(circle, #004488, transparent); top: 40%; right: -120px; }
+  .nebula-3 { width: 400px; height: 300px; background: radial-gradient(circle, #800040, transparent); bottom: 5%; left: 20%; }
+
+  /* ── 布局 ── */
+  #wrapper {
+    position: relative; z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ── 顶部导航 ── */
+  #toc-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(8,12,26,0.92);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    padding: 10px 24px;
+    display: flex; align-items: center; gap: 6px;
+    flex-wrap: wrap;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+  }
+  #toc-bar a {
+    color: var(--muted); text-decoration: none;
+    padding: 3px 8px; border-radius: 3px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  #toc-bar a:hover { color: var(--gold); border-color: var(--border); }
+  .toc-sep { color: var(--border); }
+
+  /* ── 英雄区 ── */
+  #hero {
+    text-align: center;
+    padding: 80px 0 60px;
+    position: relative;
+  }
+  .hero-eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.25em;
+    color: var(--sky-dim);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  #hero h1 {
+    font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    color: var(--gold-lt);
+    line-height: 1.4;
+    text-shadow: 0 0 30px rgba(201,168,76,0.4);
+    margin-bottom: 12px;
+  }
+  .hero-subtitle {
+    font-size: 0.88rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    margin-bottom: 40px;
+  }
+  .hero-divider {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    margin: 0 auto;
+  }
+  .hero-divider-line {
+    height: 1px; width: 120px;
+    background: linear-gradient(to right, transparent, var(--gold));
+  }
+  .hero-divider-line.rev { background: linear-gradient(to left, transparent, var(--gold)); }
+  .hero-divider-star { color: var(--gold); font-size: 1.2rem; }
+
+  /* ── 主体内容区 ── */
+  main { margin-top: 10px; }
+
+  /* ── 章节卡片 ── */
+  .section-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 42px 48px;
+    margin-bottom: 36px;
+    position: relative;
+    backdrop-filter: blur(8px);
+  }
+  .section-card::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    opacity: 0.6;
+  }
+
+  /* ── 引言特殊 ── */
+  #intro-card { border-color: rgba(126, 200, 227, 0.35); }
+  #intro-card::before { background: linear-gradient(to right, transparent, var(--sky), transparent); }
+
+  /* ── 标题层级 ── */
+  h2 {
+    font-size: 1.35rem;
+    color: var(--gold-lt);
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2 .sec-num {
+    font-size: 0.75rem;
+    color: var(--gold);
+    background: rgba(201,168,76,0.12);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    letter-spacing: 0.12em;
+  }
+  h3 {
+    font-size: 1.05rem;
+    color: var(--sky);
+    margin: 28px 0 14px;
+    padding-left: 14px;
+    border-left: 3px solid var(--sky-dim);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── 段落 ── */
+  p { margin-bottom: 1.2em; font-size: 0.96rem; }
+
+  /* ── 引用块 ── */
+  blockquote {
+    margin: 22px 0;
+    padding: 14px 24px;
+    border-left: 3px solid var(--accent);
+    background: rgba(160, 102, 204, 0.08);
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    color: #c8b8e0;
+    font-size: 0.93rem;
+  }
+  blockquote p { margin-bottom: 0.4em; }
+  blockquote p:last-child { margin-bottom: 0; }
+
+  /* ── 表格 ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.86rem;
+  }
+  thead tr { background: rgba(201,168,76,0.12); }
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    color: var(--gold);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(201,168,76,0.04); }
+  tbody td {
+    padding: 12px 16px;
+    vertical-align: top;
+    line-height: 1.75;
+  }
+  tbody td strong { color: var(--gold-lt); }
+
+  /* ── 角色高亮徽章 ── */
+  .char-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-size: 0.82rem;
+    color: var(--gold);
+    margin: 0 2px;
+    white-space: nowrap;
+  }
+  .char-badge.sky { background: rgba(126,200,227,0.12); border-color: rgba(126,200,227,0.35); color: var(--sky); }
+  .char-badge.purple { background: rgba(160,102,204,0.15); border-color: rgba(160,102,204,0.4); color: #c8b8e0; }
+
+  /* ── 信息框 ── */
+  .info-box {
+    background: rgba(0, 80, 140, 0.15);
+    border: 1px solid rgba(126,200,227,0.3);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 22px 0;
+    font-size: 0.9rem;
+  }
+  .info-box-title {
+    color: var(--sky);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  /* ── 结论列表 ── */
+  .conclusion-list { list-style: none; }
+  .conclusion-list li {
+    display: flex; gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.93rem;
+  }
+  .conclusion-list li:last-child { border-bottom: none; }
+  .conc-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+
+  /* ── 引用文献 ── */
+  #refs { font-size: 0.8rem; }
+  #refs h2 { font-size: 1.1rem; }
+  .ref-list { list-style: none; }
+  .ref-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; gap: 10px;
+  }
+  .ref-num { color: var(--gold); font-size: 0.75rem; flex-shrink: 0; width: 22px; }
+  .ref-list a { color: var(--sky-dim); text-decoration: none; }
+  .ref-list a:hover { color: var(--sky); text-decoration: underline; }
+
+  /* ── 页脚 ── */
+  footer {
+    text-align: center;
+    padding: 32px 0 0;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  footer .footer-star { color: var(--gold); font-size: 1rem; }
+
+  /* ── 链接 ── */
+  a { color: var(--sky-dim); }
+  a:hover { color: var(--sky); }
+
+  /* ── 滚动条 ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--deep); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── 响应式 ── */
+  @media (max-width: 640px) {
+    .section-card { padding: 28px 20px; }
+    #toc-bar { display: none; }
+    #hero h1 { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 星空 -->
+<div id="starfield"></div>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div class="nebula nebula-3"></div>
+
+<!-- 顶部导航 -->
+<nav id="toc-bar" aria-label="章节导航">
+  <a href="#hero">首页</a>
+  <span class="toc-sep">·</span>
+  <a href="#intro">引言</a>
+  <span class="toc-sep">·</span>
+  <a href="#sec1">第一章</a>
+  <span class="toc-sep">·</span>
+  <a href="#sec2">第二章</a>
+  <span class="toc-sep">·</span>
+  <a href="#sec3">第三章</a>
+  <span class="toc-sep">·</span>
+  <a href="#sec4">第四章</a>
+  <span class="toc-sep">·</span>
+  <a href="#sec5">第五章</a>
+  <span class="toc-sep">·</span>
+  <a href="#conclusion">结论</a>
+  <span class="toc-sep">·</span>
+  <a href="#refs">引用</a>
+</nav>
+
+<div id="wrapper">
+
+  <!-- 英雄区 -->
+  <header id="hero">
+    <p class="hero-eyebrow">提瓦特宇宙学隐喻深度测绘报告 · 原神 6.5 版本</p>
+    <h1>《少女薇拉的忧郁》<br>全本叙事结构与提瓦特宇宙学隐喻深度测绘报告</h1>
+    <p class="hero-subtitle">Vera's Melancholy · Complete Narrative Deconstruction</p>
+    <div class="hero-divider">
+      <div class="hero-divider-line"></div>
+      <span class="hero-divider-star">✦</span>
+      <div class="hero-divider-line rev"></div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 引言 -->
+    <section id="intro" class="section-card" id="intro-card">
+      <h2><span class="sec-num">引言</span>提瓦特大陆的星际异典与文本断层</h2>
+      <p>在提瓦特大陆浩如烟海的文献档案与民间传说中，《少女薇拉的忧郁》（Vera's Melancholy）始终占据着一个极其特殊、甚至充满突兀感的文学坐标。绝大多数流传于蒙德、璃月乃至整个提瓦特的民间书籍，通常以童话隐喻（如《野猪公主》）、失落的神话史诗（如《白之公主与六侏儒》）或地区历史传记为主要形态，而《少女薇拉的忧郁》却是一部带有强烈"太空歌剧"（Space Opera）和硬科幻色彩的系列小说。</p>
+      <p>该书自蒙德地区初现以来，前十卷一直以残本的形式流传，讲述了居住在德尔斐（Delphi）的平凡少女<span class="char-badge">薇拉</span>、其青梅竹马<span class="char-badge">萨奇</span>，以及跨维度星际旅者<span class="char-badge sky">艾克</span>和仙女座帝国公主之间的宏大宇宙冒险故事。</p>
+      <p>由于该系列在极长的一段时间内缺乏官方大结局，提瓦特大陆的读者与学者普遍猜测这位身份神秘的作者已经离世或遭遇不测，从而在文本库中留下了巨大的留白，任由后人通过"同人创作"或自我续写来补全这一叙事断层。然而，随着原神6.5版本<strong>空间神殿（Temple of Space）</strong>区域的开启，这部旷日持久的星际史诗终于在被封锁的高维空间中迎来了其真正的结局——第十一卷与第十二卷。</p>
+
+      <div class="info-box">
+        <p class="info-box-title">★ 报告范围说明</p>
+        <p>本报告将对《少女薇拉的忧郁》的完整文本流变、空间地理分布、作者身份的跨维度考证、深层叙事结构，以及其背后所折射出的宏大提瓦特宇宙学隐喻（包括降临者假说、崩坏宇宙互文、渊下宫文化演变及高维时间哲学）进行全方位、深层次的穷尽式解析。</p>
+      </div>
+    </section>
+
+    <!-- 第一章 -->
+    <section id="sec1" class="section-card">
+      <h2><span class="sec-num">第一章</span>星海的呼唤与时间回溯的悲剧：第一至第十卷叙事解构</h2>
+      <p>在对6.5版本新增的高维卷宗进行哲学解构之前，必须先对前十卷所构建的文本表象进行详尽的还原与心理学分析。这并非一部简单的青春恋爱小说，而是一部包裹在少年少女日常之下，探讨童年剥夺、时间回环与存在主义危机的宏大悲剧。</p>
+
+      <h3>1.1 德尔斐的枯燥、星际幻想与降临者的介入</h3>
+      <p>故事的起点设定在一个名为德尔斐（Delphi）的平凡乡间小村庄。女主角<span class="char-badge">薇拉</span>被刻画为一个极度厌倦平庸、对遥远星系充满狂热幻想的少女。在第一卷的开篇，她向性格谨慎、循规蹈矩的青梅竹马<span class="char-badge">萨奇</span>抱怨道：</p>
+
+      <blockquote>
+        <p>"有时候我会想……这个小村庄里什么事都没得做。住在这里真是太无趣了。"</p>
+      </blockquote>
+
+      <p>薇拉拒绝承认世界是单调的，她坚信"只是有趣的事情发生在遥远的星系中"。她甚至向萨奇精确描绘了她的宇宙愿景：</p>
+
+      <blockquote>
+        <p>"我相信在星海的另一边，存在着一个居住着神明的星球，他们能回应所有的祈求与愿望……我相信在我们的宇宙中，有一个世界正处于对抗末日的战争中，十四名女武神（Valkyries）高贵而优雅的灵魂在那里燃烧，哪怕只是为了短暂而壮丽的瞬间。"</p>
+      </blockquote>
+
+      <p>这种对宇宙灾厄的精确描绘，构成了小说与提瓦特外部现实重叠的第一个锚点。神秘星际向导<span class="char-badge sky">艾克</span>（Ike）的到来彻底打破了德尔斐的宁静。艾克被描绘为一个"降服恶魔"却又充满世俗趣味、性格如同"躁狂精灵"（Manic pixie dream boy）的跨维度空间旅行者。</p>
+
+      <blockquote>
+        <p>"'彼方'有多远？宇宙中的任何地方都和我的后院一样无聊。" — <span class="char-badge sky">艾克</span></p>
+      </blockquote>
+
+      <p>以此为契机，他带领薇拉与萨奇踏上了一场跨越麦哲伦星云（Magellic Cloud）、仙女座（Andromeda）和猎户座旋臂（Orion Arm）的漫长星际冒险。</p>
+
+      <h3>1.2 二十年的宇宙战争与英雄的异化</h3>
+      <p>在随后的卷宗中，薇拉与萨奇被卷入了一场长达二十年的星际战争与宇宙奇观探索之中。在这场宏大的史诗中，原本平凡、怯懦的少年<span class="char-badge">萨奇</span>被迫完成了向"星际战士"和"英雄"的痛苦蜕变。他们在这场冒险中结识了骄傲的仙女座帝国公主，并见证了无数星辰的陨落与文明的兴衰。</p>
+      <p>小说在这一阶段抛出了大量深邃的宇宙学论述，例如<em>"并非所有闪光的东西都是金子，有时它是破碎之心的倾泻"</em>，以及<em>"你不能在星际高速公路的边缘野餐！"</em>这些看似荒诞的对白，实则铺垫了个体在面对宏大宇宙尺度时的无力感。</p>
+
+      <h3>1.3 记忆的不对等与回溯的悲剧：时间弯曲的代价</h3>
+      <p>前十卷所营造的最大悲剧，发生在这场二十年冒险的终局。当薇拉在某种不可名状的灾难中陨落时，"<strong>时间自身向后弯曲来拯救她</strong>"（time itself bent backward to save her）。艾克动用其近乎神明的伟力扭转了时间洪流：</p>
+
+      <blockquote>
+        <p>"人类的灵魂依然太不成熟。我需要引导你们体验童年的奇迹……在你们通往青春的漫长旅途中，你们将一路歌唱。" — <span class="char-badge sky">艾克</span></p>
+      </blockquote>
+
+      <p>然而，这场时间重置的代价是极其残忍且极度不对等的。当时间重启，<span class="char-badge">萨奇</span>带着苍老的灵魂与沉重的二十年战争记忆回到了年轻的躯壳中；而<span class="char-badge">薇拉</span>则在时间线的重置中被完全洗去了那段惨烈的记忆，她醒来时一如既往，依旧是那个未曾经历苦难、天真烂漫的少女。</p>
+
+      <blockquote>
+        <p>"他带着旧面孔回来了，携带着她永远无法分享的记忆。她醒来时未曾改变。而他，已然变成了另一个人。"</p>
+      </blockquote>
+
+      <p>前十卷的故事在此戛然而止，留下了一个令人窒息的存在主义诘问：<strong>当你为了拯救他人的童年而牺牲了自己的童年时，你会变成什么？</strong></p>
+    </section>
+
+    <!-- 第二章 -->
+    <section id="sec2" class="section-card">
+      <h2><span class="sec-num">第二章</span>空间地理分布与6.5版本神殿解密：文本的物理隔绝</h2>
+      <p>《少女薇拉的忧郁》不仅仅在叙事上充满断层，其文本在提瓦特大陆的物理散落轨迹与存储位置，本身即构成了提瓦特世界边境管控、阶级固化与高维力量干涉的地理学证据。</p>
+
+      <h3>2.1 凡人城邦的文本下沉与骑士团的仰望</h3>
+      <p>在6.5版本更新前，该系列的前十卷呈现出向蒙德地区高度集中的分布特征，并形成了清晰的阶级与知识下沉路径。</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>卷宗编号</th>
+              <th>物理位置分布与获取节点</th>
+              <th>地理与社会学隐喻分析</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>第一、二、三、五、九卷</strong></td>
+              <td>蒙德城西风骑士团图书馆内</td>
+              <td>作为知识枢纽的集中地，这些卷宗被视为正统的馆藏文献，由学者与民众自由借阅，体现了知识的公共化。第一卷甚至可通过望舒客栈的提亚（Tia）获取，暗示其在提瓦特商路上的广泛流通。</td>
+            </tr>
+            <tr>
+              <td><strong>第六、十卷</strong></td>
+              <td>西风骑士团代理团长琴（Jean）的办公室内</td>
+              <td>处于蒙德的权力核心区。据档案记录，琴在深夜处理完繁重公务后，时常会翻阅《少女薇拉的忧郁》，甚至受书中星海冒险的启发，产生在黎明前前往誓言岬（Cape Oath）仰望星空的冲动。这反映了即使是提瓦特的高阶统治者，也渴望突破"虚假之天"的心理潜流。</td>
+            </tr>
+            <tr>
+              <td><strong>第四、七、八卷</strong></td>
+              <td>猎鹿人餐厅二楼阳台、晨曦酒庄内外桌面上</td>
+              <td>散落于民间消费与商业节点，证明该书在世俗社会中具有极高的普及度与娱乐价值。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>2.2 摩诃方广的空间折叠与极密级封锁</h3>
+      <p>与前十卷在凡人城邦的随意散落形成极其强烈的反差，补全故事结局的第十一卷和第十二卷被严密封锁在了具有极高维度密级的"<strong>空间神殿</strong>"（Temple of Space）内，具体位置位于"<strong>摩诃方广</strong>"（Mahavaipulya Chamber）的四层与二层图书馆中。</p>
+      <p>"摩诃方广"这一名称在词源学上带有强烈的形而上学与佛教宇宙观意味（大方广），暗示此地是独立于提瓦特常规物理法则之外的空间枢纽。</p>
+      <p>更为诡异的是第十二卷的物理获取方式。它并非如前十卷那般直接摆放于书架或桌面上，而是被隐藏在一种被称为"<strong>页面折叠机制</strong>"（Page Mechanic）的空间结构中。探索者必须在摩诃方广入口传送点附近的第二或第三页机制处，执行精确的"四分之一折叠"（1/4 fold）动作，才能迫使隐藏的宝箱在三维空间中显影，从而获取该卷宗。</p>
+
+      <div class="info-box">
+        <p class="info-box-title">✦ 设计层面的哲学隐喻</p>
+        <p>这一极其特殊的获取机制，从物理交互与关卡设计层面完美隐喻了小说的核心哲学命题——"空间的扭曲与折叠"（Warped Space），同时证实了最终卷宗的隐藏者或封锁者，拥有随意操纵提瓦特空间维度的神级能力。</p>
+      </div>
+    </section>
+
+    <!-- 第三章 -->
+    <section id="sec3" class="section-card">
+      <h2><span class="sec-num">第三章</span>第十一卷与第十二卷的双轨叙事：神性冷漠与凡人悲剧的二律背反</h2>
+      <p>空间神殿中解封的两卷并非一个线性连贯的大结局，而是以双重视角构筑了两个截然不同、甚至相互矛盾的结局版本。这两卷书互为镜像、互为驳斥，构成了一组关于"救赎与自我"的哲学二律背反。</p>
+
+      <h3>3.1 第十一卷：宏大视角的"无爱宣言"与神性的残酷旁观</h3>
+      <p>学界与考据分析普遍认为，第十一卷代表了故事的"<strong>真结局</strong>"（Real ending），也是被囚禁的作者本人亲自撰写的原本。在这一卷中，叙事的重心从承受苦难的凡人转移到了具有神性视角的<span class="char-badge sky">艾克</span>身上。</p>
+      <p>第十一卷彻底撕破了艾克作为"向导"的温情面纱，展现出令人不寒而栗的神性冷漠。这一卷被评论家精准地定义为"<em>一份超然而苦涩的无爱宣言</em>"（a detached and bitter declaration of non-love）。文本通过极端的对比来塑造角色：薇拉是一个深爱着她具体朋友的凡人，而艾克则是一个声称"平等地爱着每一个人"，却在所到之处不可避免地引入混乱与灾厄的宇宙实体。</p>
+      <p>在该卷的高潮与终局部分，艾克站在山丘上俯瞰着德尔斐村，突然摘下眼镜擦拭眼泪，并以震耳欲聋的音量向着宇宙高声呼喊：</p>
+
+      <blockquote>
+        <p>"我爱你们。我爱你们所有人！"<br>（I love you all. I love all of you!）</p>
+        <p>— <span class="char-badge sky">艾克</span>，第十一卷终章</p>
+      </blockquote>
+
+      <p>然而，文本在此处埋下了一个令人毛骨悚然的心理学伏笔：在早前的故事中，<span class="char-badge">萨奇</span>曾敏锐地指出，艾克在撒谎时总是会下意识地擦拭眼镜。艾克在宣告他那"响彻宇宙的爱意"时摘下眼镜擦拭眼泪的动作，使得这份看似宏大的博爱变得极其诡异、虚伪且充满欺骗性。</p>
+
+      <blockquote>
+        <p>"远方的尺度追随心灵而定。因此，我的心比整个宇宙还要大一点。"<br>（The scale of everything beyond follows the heart... Thus, my heart is slightly bigger than the entire universe.）</p>
+      </blockquote>
+
+      <p>在第十一卷的结尾，文本无情地指出：德尔斐既不是宇宙的中心，也不是宇宙的心脏，只是一座普通的小镇。晚风将艾克的呼喊带走，不久就消失在欢乐家庭的灯火和人类青春的黎明中。这是一个关于绝对客观、绝对宏大却又<strong>绝对虚无</strong>的结局，星空不属于任何人，痛苦也得不到任何宇宙尺度的回音。</p>
+
+      <h3>3.2 第十二卷：极度利己的爱恋、凡人的逃避与同人投射</h3>
+      <p>如果说第十一卷是居高临下的神之视界，那么第十二卷则被学界普遍认定为提瓦特本土居民撰写的"<strong>同人创作</strong>"（Fanfic），是一篇充满了凡人私欲、自我中心主义与极度利己主义的变体结局。</p>
+      <p>在第十二卷中，时间线推进至萨奇与薇拉订婚的前夕，婚礼之日已然临近。然而，艾克突然出现并打破了这份宁静：</p>
+
+      <blockquote>
+        <p>"这个宇宙处于毁灭的边缘。我们需要你……再进行一次冒险，就像过去那样。"</p>
+        <p>（见到订婚戒指后）"不，我忘了。你现在只是一个凡人。"</p>
+      </blockquote>
+
+      <p>面对宇宙毁灭的重压，萨奇试图寻找一种妥协的救赎。他找到了仙女座帝国公主，大声恳求她作为自己与艾克之间的中间人。然而，他遭到了公主极度轻蔑和残酷的降维打击：</p>
+
+      <blockquote>
+        <p>"令人作呕。无聊。闭嘴，你这虫子（worm）。你污染了我的耳朵。我已经承认薇拉是我的朋友。我绝不会把她交给像你这样懦弱的人渣！" — 仙女座帝国公主</p>
+      </blockquote>
+
+      <p>面临巨大屈辱与宇宙危机的双重压迫，萨奇的心理防线彻底崩溃。他最终向薇拉宣告：</p>
+
+      <blockquote>
+        <p>"为了你，我见证了宇宙的每一个奇迹，我的童年就是这样结束的。"<br>"如果没有你在身边，我将永远无法到达我的青春。"<br>（I will never reach my youth without you by my side.）</p>
+      </blockquote>
+
+      <p>随后，如同卷宗所揭示的那样，萨奇选择抛下薇拉，转身去"拯救宇宙"，留下薇拉独自在德尔斐面对残破的现实。</p>
+
+      <h3>3.3 现实倒影：NPC希尔达（Hilda）的镜像创伤与文本嵌套</h3>
+      <p>为何学术界坚信第十二卷是一部伪作或同人志？决定性的证据来源于提瓦特现实中非玩家角色（NPC）遭遇的精准映射。文本比对指出，第十二卷的叙事逻辑与提瓦特NPC <strong>希尔达（Hilda）</strong>的真实人生经历如出一辙——希尔达曾经有一个未婚夫，该未婚夫在留下了一句"我要去拯救世界"的豪言壮语后，便无情地抛弃了她离去。</p>
+      <p>这种将自身被抛弃的深层创伤经历，无意识或有意识地投射到流行文学作品中，强行改变主角命运的行为，构成了提瓦特特有的"<strong>文本嵌套论</strong>"（Textual Nesting）。第十二卷本质上是一面心理防御的镜子，映照出提瓦特凡人在面对不可抗拒的离别、神明意志的剥夺与命运的无力感时，试图通过虚构史诗与自我感动来掩盖现实惨剧的心理机制。</p>
+    </section>
+
+    <!-- 第四章 -->
+    <section id="sec4" class="section-card">
+      <h2><span class="sec-num">第四章</span>作者身份考证：非法入境者、跨维流亡与哈兰·埃里森互文</h2>
+      <p>在探讨提瓦特天理为何要将这两卷书封锁在摩诃方广之前，必须明确《少女薇拉的忧郁》的作者究竟是谁。通过在空间神殿内发现的机密手记残页，这位作者的真实身份、停更原因及其与提瓦特边境防御系统的冲突终于浮出水面。</p>
+
+      <h3>4.1 提瓦特收容舱室中的玩世不恭者</h3>
+      <p>在摩诃方广梅兰塔（Melanta）房间对面的区域——这里曾是用于关押"深渊血亲"（Abyss Sibling）的高等级收容箱所在地——探索者发现了一份由两种语言（仙女座帝国语与提瓦特当地语言）双语印刷的便签。这表明提瓦特最高意志将该作者的威胁等级，直接等同于能够引发世界倾覆的深渊势力。</p>
+      <p>然而，这位作者在手记中展现出了一种超越生死与维度的玩世不恭：</p>
+
+      <blockquote>
+        <p>"你们的收容设施相当巧妙。我在里面花了数年时间进行仔细的修补，才终于溜了出来……如果你们碰巧发现了这张纸条，请放松。收容容器应该完好无损。我想。"</p>
+      </blockquote>
+
+      <p>作者进一步嘲讽了提瓦特边境系统的荒谬与不讲理。他指出自己被当局控告"<strong>非法入境</strong>"（Illegally entering Teyvat），未经任何审判与解释就被关押。但他觉得这极其可笑，因为他早已通过正当商业渠道，收取了提瓦特当地货币结算的稿费，且小说的代理发行方正是稻妻著名的"<strong>八重堂</strong>"（Yae Publishing House）。</p>
+      <p>作者还透露了他流亡多元宇宙的根本原因：他在小说中对一位仙女座帝国公主的负面刻画，引起了那位激发该角色灵感的真实公主的极大愤慨，导致他在整个银河系被下达了<strong>星际追杀令</strong>（Kill order）。这名男性星际旅者并非为了夺取世界权柄而来的标准"降临者"（Descender），而是一位缺乏干涉世界事务兴趣的纯粹记录者与旁观者。</p>
+
+      <h3>4.2 互文性解构：在世界中心呼唤爱的野兽</h3>
+      <p>在文学溯源层面，《少女薇拉的忧郁》的深层结构直接借鉴了哈兰·埃里森（Harlan Ellison）的经典科幻短篇<strong>《在世界中心呼唤爱的野兽》</strong>（The Beast That Shouted Love at the Heart of the World）。</p>
+      <p>埃里森的原作探讨了一个处于时间和空间中心的阈限社会（Liminal society）；多元宇宙中存在的所有其他事物，仅仅是他们的"回声"（Echoes）。这个位于中心的社会，通过将他们自身的"疯狂"与"灾厄"排泄到多元宇宙中去，从而注定其他宇宙的毁灭，以此来维持他们自己世界的和谐与纯洁。<em>这就像是天堂把垃圾倾倒在无限的地球上。</em></p>
+
+      <div class="info-box">
+        <p class="info-box-title">✦ 互文性意义</p>
+        <p>这一文学原型的揭示，是理解《少女薇拉的忧郁》第十一卷艾克行为逻辑的终极钥匙。艾克作为一个能在多元宇宙间穿梭、操纵时间的神性实体，他大喊着"我爱你们所有人"，实质上是在向被他当作"垃圾场"的低维世界（德尔斐）倾泻高维的灾厄与疯狂。这要求读者必须以非线性的顺序多次阅读《少女薇拉的忧郁》，因为未来的故事正在不断重新语境化过去的故事。</p>
+      </div>
+    </section>
+
+    <!-- 第五章 -->
+    <section id="sec5" class="section-card">
+      <h2><span class="sec-num">第五章</span>隐藏在太空歌剧下的提瓦特天庭解密报告（宇宙学隐喻测绘）</h2>
+      <p>《少女薇拉的忧郁》之所以被提瓦特极高规格的收容设施羁押其作者，不仅因为这是一篇小说，更因为它是一份用通俗寓言精密包装的"提瓦特天庭解密报告"。将小说的核心意象与原神宏观的世界观底层逻辑（Lore）进行隐喻测绘，可以提取出大量关于"降临者"、"天理架构"以及"崩坏树海宇宙"的极密数据。</p>
+
+      <h3>5.1 降临者架构与神之心（Gnoses）的拟人化寓言</h3>
+      <p>随着6.5版本剧情的推进，越来越多的证据指向《少女薇拉的忧郁》是一场关于"第三降临者"（Third Descender）悲惨命运的政治寓言。以下是基于文本解构构建的隐喻映射模型：</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>小说核心元素</th>
+              <th>提瓦特宇宙对应实体</th>
+              <th>映射逻辑与深层政治洞察</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>萨奇 (Sachi)</strong></td>
+              <td><strong>第三降临者</strong></td>
+              <td>萨奇被迫牺牲自己的童年与存在的连续性去"拯救宇宙"，在第十二卷中甚至被要求放弃一切。其本质完美隐喻了第三降临者被至高权力肢解，并转化为"神之心"（Gnoses）以维持提瓦特世界屏障的惨烈历史。萨奇绝望地说："如果宇宙终结，德尔斐、室女座星云……还有薇拉，都会消失"——这正是降临者面临的道德绑架。</td>
+            </tr>
+            <tr>
+              <td><strong>艾克 (Ike)</strong></td>
+              <td><strong>天理 / 光之神</strong></td>
+              <td>艾克自称爱着所有人，却将他人视为纯粹的系统工具。他冷酷地指出萨奇是星际战士，"没有你我们的胜算下降30%"。这与天理掌控提瓦特规则、漠视个体命运的宏观神性如出一辙。艾克的"时间回溯"与"篡改记忆"能力，也与天理统御法则、清洗世界树记录的能力高度吻合。</td>
+            </tr>
+            <tr>
+              <td><strong>薇拉 (Vera)</strong></td>
+              <td><strong>冰之女皇 / 提瓦特本身</strong></td>
+              <td>薇拉在遭遇危机与背叛后，其存在主义哲学发生了剧变。她被视为提瓦特这个封闭世界的具象化。在讨论救赎时，"木偶"（Sandrone）曾质问仅仅为了拯救自己是否足以成为拯救世界的理由，而蔡特林给出的答案正是薇拉的答案："我就是我的整个世界"（I am my entire world）。这是一种极致的抗争宣言。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>5.2 崩坏宇宙互文：戳破虚假之星空的利刃</h3>
+      <p>小说第一卷中薇拉对星海的描述，不仅是幻想，更是对提瓦特外部真实宇宙的纪实：</p>
+
+      <blockquote>
+        <p>"在我们的宇宙中，有一个世界正处于对抗末日（Doomsday）的战争中，十四名女武神（Valkyries）高贵而优雅的灵魂在那里燃烧，哪怕只是为了短暂而壮丽的瞬间……"</p>
+      </blockquote>
+
+      <p>这一段落是原神文本中最露骨、最直接的第四面墙突破（Breaking the fourth wall），它毫无保留地引用了米哈游（HoYoverse）同源的《崩坏3》（Honkai Impact 3rd）宇宙中，关于十四位律者/女武神对抗"崩坏"机制的宏大历史。这一互文性绝非简单的商业彩蛋，而是构成了对提瓦特世界观的第三阶洞察：</p>
+
+      <div class="info-box">
+        <p class="info-box-title">★ 核心宇宙学命题</p>
+        <p><strong>提瓦特大陆仅仅是量子之海/虚数之树（Imaginary Tree）宏大系统中的一片树叶。</strong>作者能够知晓"女武神"的存在，证明他是一位在虚数之树枝干间穿梭的跨树叶旅行者。提瓦特的天理之所以将他强行拘禁在空间神殿，恰恰暴露出提瓦特统治阶层极度恐惧外部宇宙信息流入，从而打破天理精心构建的"虚假星空"封锁逻辑。</p>
+      </div>
+
+      <h3>5.3 渊下宫（Enkanomiya）的文化残留与时空重叠</h3>
+      <p>另一个极其隐蔽且不容忽视的文本异常，存在于角色的命名逻辑之中。薇拉的故乡名为"<strong>德尔斐</strong>"（Delphi），这是一个典型的希腊化名称（对应渊下宫早期的建筑风格与古名），但男主角却拥有一个纯粹的日式名称"<strong>萨奇</strong>"（Sachi）。</p>
+      <p>在提瓦特的历史地理学中，这种"希腊底色强制覆盖日式名称"的现象只集中发生在一个特定的地理坐标：<strong>渊下宫</strong>。历史记录表明，当魔神奥罗巴斯（Orobashi）降临渊下宫后，为了让白夜国的人民能够融入海祇岛的鸣神（Narukami）文化体系，他强制鼓励民众采用日式的鸣神名字，取代他们原本传统的希腊名字。通过与渊下宫NPC阿瑠（Aru）的对话可知，渊下宫中确实存在名为"德尔斐"的地理参考点。</p>
+      <p>因此，《少女薇拉的忧郁》表层是一出关于仙女座与麦哲伦星云的星际歌剧，但其底层文明蓝本极可能正是源自<strong>渊下宫（白夜国）的远古绝密记录</strong>。</p>
+
+      <h3>5.4 依斯塔露（Istaroth）的干涉与"未来拯救过去"</h3>
+      <p>在小说构建的时间模型中，核心情节点在于"当她倒下时，时间自身向后弯曲以拯救她"。这种时间并非线性、不可逆的单向流淌，而是可以通过特定锚点进行折叠、重构的维度。这完美契合了提瓦特"时间之执政"<strong>依斯塔露（Istaroth）</strong>的核心神权特征，即"未来拯救过去"的闭环定律。</p>
+      <p>然而，《少女薇拉的忧郁》借由萨奇的悲剧，对这种神性法则提出了一个极其尖锐的衍生思考：当未来干涉过去、时间发生重置时，因果律的成本究竟由谁来支付？答案是<strong>记忆的不可抹杀与主体性的撕裂</strong>。艾克重置时间并没有真正消除灾难带来的痛苦，只是将二十年的沉重记忆与衰老的灵魂，残忍地单独转移到了萨奇一人身上。<em>时间之神可以轻易重置物质层面的物理状态，但却无法重构因果的重量。</em>这是对提瓦特世界树（Irminsul）修改机制的最深刻的反思与讽刺。</p>
+    </section>
+
+    <!-- 结论 -->
+    <section id="conclusion" class="section-card">
+      <h2><span class="sec-num">结论</span>信息茧房的裂隙与凡人的终极反抗</h2>
+      <p>综合上述对《少女薇拉的忧郁》十二卷全本及其在原神6.5版本补充空间神殿设定的详尽拆解，我们可以提取出以下结构性的学术结论：</p>
+
+      <ul class="conclusion-list">
+        <li>
+          <span class="conc-num">1</span>
+          <div>
+            <strong>高维信息入侵与系统免疫反应：</strong>《少女薇拉的忧郁》绝非提瓦特本土的虚构文学，而是一份伪装成太空歌剧的跨维度纪实报告。其作者作为越界者，通过虚数宇宙的网络将关于"女武神对抗崩坏"、"时间回溯代价"等机密信息带入了提瓦特，因此触发了提瓦特防御系统的免疫反应，遭到空间神殿的物理拘禁与仙女座帝国的星际通缉。
+          </div>
+        </li>
+        <li>
+          <span class="conc-num">2</span>
+          <div>
+            <strong>降临者悲剧的历史素描：</strong>第十一卷的神性冷漠与第十二卷的自我毁灭，实质上是对提瓦特宏大政治格局的隐喻。萨奇牺牲自身存在的连续性、艾克虚伪的宏大博爱，构成了对"第三降临者被粉碎为神之心"和"天理以强权维系提瓦特虚假秩序"最讽刺、最深刻的预言与素描。
+          </div>
+        </li>
+        <li>
+          <span class="conc-num">3</span>
+          <div>
+            <strong>文本嵌套与创伤的自我疗愈：</strong>第十二卷作为同人文本的引入，以及与NPC希尔达命运的精准重叠，揭示了提瓦特世界内存在着极强的社会心理学投射效应。凡人通过篡改神话与文学文本来疗愈自身被世界抛弃的创伤，殊不知他们的个人悲剧，本身就是高维剧本在提瓦特微观层面的又一次无情重复。
+          </div>
+        </li>
+        <li>
+          <span class="conc-num">4</span>
+          <div>
+            <strong>渊下宫文明的加密遗光：</strong>小说中希腊底色与日式命名的奇特混合（德尔斐与萨奇的并存），在文化语言学层面将这个星际故事的起源深深锚定在了提瓦特暗无天日的渊下宫。这证明了即使在深渊与白夜交替的绝境中，关于星海、关于其他宇宙的真实记忆，仍以加密流行文学的形式顽强地流传了下来，直至今日。
+          </div>
+        </li>
+      </ul>
+
+      <p style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);">《少女薇拉的忧郁》不再仅仅是一部闲暇时供西风骑士团代理团长翻阅以排解压力的科幻小说。它是天理统治下提瓦特绝对信息茧房上的一道巨大、无法缝合的裂隙。在这道裂隙中，时间和空间的法则被高维实体肆意蹂躏，而低维度的凡人生命在不可避免的死亡与记忆剥夺面前，唯一的反抗方式或许正如薇拉所作出的最终宣告：</p>
+
+      <blockquote style="font-size: 1.05rem; border-left-color: var(--gold); background: rgba(201,168,76,0.06); color: var(--gold-lt);">
+        <p><strong>"我即是我的整个世界。"</strong><br>（I am my entire world.）</p>
+      </blockquote>
+
+      <p>这种将宏大宇宙内化为自我认同的哲学觉醒，才是这部星际史诗留给提瓦特文明最珍贵的精神遗产。</p>
+    </section>
+
+    <!-- 引用文献 -->
+    <section id="refs" class="section-card">
+      <h2><span class="sec-num">引用</span>引用的著作</h2>
+      <ol class="ref-list">
+        <li><span class="ref-num">1.</span><div><a href="https://www.reddit.com/r/Genshin_Impact/comments/1sgd5rb/you_can_find_2_last_vera_s_melancholy_books_in/" target="_blank">You can find 2 last Vera's Melancholy books in Temple of Space... — Reddit r/Genshin_Impact</a></div></li>
+        <li><span class="ref-num">2.</span><div><a href="https://www.reddit.com/r/Genshin_Lore/comments/rz8mix/revisiting_veras_melancholy_in_light_of_enkanomiya/" target="_blank">Revisiting Vera's Melancholy in light of Enkanomiya — Reddit r/Genshin_Lore</a></div></li>
+        <li><span class="ref-num">3.</span><div><a href="https://www.hoyolab.com/article/15054813" target="_blank">"The Future Saves the Past": The Space Opera of Vera's Melancholy — HoYoLAB</a></div></li>
+        <li><span class="ref-num">4.</span><div><a href="https://www.reddit.com/r/Genshin_Impact/comments/1sj7gaq/any_idea_who_is_this_65_world_quest_spoilers/" target="_blank">Any Idea who is this?? 6.5 World Quest Spoilers — Reddit r/Genshin_Impact</a></div></li>
+        <li><span class="ref-num">5.</span><div><a href="https://genshin-impact.fandom.com/wiki/Vera%27s_Melancholy" target="_blank">Vera's Melancholy | Genshin Impact Wiki — Fandom</a></div></li>
+        <li><span class="ref-num">6.</span><div><a href="https://gi.yatta.moe/en/archive/book/3/veras-melancholy" target="_blank">Vera's Melancholy | Project Amber — Genshin Impact Wiki Database</a></div></li>
+        <li><span class="ref-num">7.</span><div><a href="https://www.reddit.com/r/Genshin_Lore/comments/1skq9wc/lets_overanalyze_the_lore_and_literary_references/" target="_blank">Let's over-analyze the lore and literary references in Luna VI. — Reddit r/Genshin_Lore</a></div></li>
+        <li><span class="ref-num">8.</span><div><a href="https://www.youtube.com/watch?v=KAvR680ZH34" target="_blank">Losing Your Childhood | Vera's Melancholy — Genshin Impact Audiobook (YouTube)</a></div></li>
+        <li><span class="ref-num">9.</span><div><a href="https://www.reddit.com/r/Genshin_Impact_Leaks/comments/1roytlu/readables_v3/" target="_blank">readables v3 — Reddit r/Genshin_Impact_Leaks</a></div></li>
+        <li><span class="ref-num">10.</span><div><a href="https://www.hoyolab.com/article/187400" target="_blank">[GUIDE] ARCHIVE ALL BOOKS (PART 2) Genshin Impact | HoYoLAB</a></div></li>
+        <li><span class="ref-num">11.</span><div><a href="https://www.youtube.com/watch?v=wi4btedmMu4" target="_blank">Collecting "Vera's Melancholy" Series - 10 Volumes | Eternal Youth Achievement (YouTube)</a></div></li>
+        <li><span class="ref-num">12.</span><div><a href="https://genshin-impact.fandom.com/wiki/Jean/Profile" target="_blank">Jean/Profile | Genshin Impact Wiki — Fandom</a></div></li>
+        <li><span class="ref-num">13.</span><div><a href="https://genshin-impact.fandom.com/wiki/Mahavaipulya_Chamber:_Library" target="_blank">Mahavaipulya Chamber: Library | Genshin Impact Wiki — Fandom</a></div></li>
+        <li><span class="ref-num">15.</span><div><a href="https://wiki.hoyolab.com/pc/genshin/entry/2309?lang=en-us" target="_blank">Vera's Melancholy — Genshin Impact HoYoWiki</a></div></li>
+        <li><span class="ref-num">16.</span><div><a href="https://www.reddit.com/r/Genshin_Lore/comments/1sjzpiv/some_more_lore_on_the_genshin_universe/" target="_blank">Some More Lore on the Genshin Universe — Reddit r/Genshin_Lore</a></div></li>
+        <li><span class="ref-num">17.</span><div><a href="https://www.reddit.com/r/Hoyoverse_scaling/comments/1sjznnx/some_more_lore_on_the_genshin_universe/" target="_blank">Some More Lore on the Genshin Universe — Reddit r/Hoyoverse_scaling</a></div></li>
+        <li><span class="ref-num">18.</span><div><a href="https://www.reddit.com/r/Genshin_Impact_Leaks/comments/1rox4ob/new_book/" target="_blank">New book — Reddit r/Genshin_Impact_Leaks</a></div></li>
+        <li><span class="ref-num">19.</span><div><a href="https://www.youtube.com/watch?v=BCT0r4B6H28" target="_blank">"The Future Saves the Past": The Space Opera of Vera's Melancholy (YouTube)</a></div></li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>
+    <p><span class="footer-star">✦</span> &nbsp; 提瓦特宇宙学隐喻深度测绘报告 · 2026 &nbsp; <span class="footer-star">✦</span></p>
+    <p style="margin-top: 8px; font-size: 0.68rem;">本报告内容基于原神游戏文本与社区学术考据，仅供学习与研究参考。</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
