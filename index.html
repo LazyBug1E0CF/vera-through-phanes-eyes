@@ -137,9 +137,9 @@
   }
 
   /* ──────────────────────────────
-     SECTION 2 — COMPARISON
+     SECTION 2 & 3 — COMPARISON
   ────────────────────────────── */
-  #sec2 {
+  #sec2, #sec3 {
     background: #0a0a18;
     display: flex;
     flex-direction: column;
@@ -169,6 +169,7 @@
     flex: 1;
     display: flex;
     overflow: hidden;
+    position: relative;
   }
 
   .panel {
@@ -209,9 +210,9 @@
     border-radius: 50%;
     margin-right: 7px;
   }
-  #panel-chatgpt .dot { background: #10a37f; }
-  #panel-claude  .dot { background: #cc785c; }
-  #panel-gemini  .dot { background: #4285f4; }
+  #panel-chatgpt .dot, #panel-qwen-chatgpt .dot { background: #10a37f; }
+  #panel-claude  .dot, #panel-qwen-claude  .dot { background: #cc785c; }
+  #panel-gemini  .dot, #panel-qwen-gemini  .dot { background: #4285f4; }
 
   /* Fullscreen button */
   .fs-btn {
@@ -320,6 +321,7 @@
 <div id="nav-dots">
   <div class="nav-dot active" data-target="0" title="序章"></div>
   <div class="nav-dot" data-target="1" title="模型对比"></div>
+  <div class="nav-dot" data-target="2" title="Qwen生成对比"></div>
 </div>
 
 <!-- Main stage -->
@@ -401,10 +403,77 @@
         </div>
 
         <!-- Fullscreen nav arrows -->
-        <button class="fs-nav fs-nav-prev" id="fsPrev" title="上一个">
+        <button class="fs-nav fs-nav-prev" title="上一个">
           <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <button class="fs-nav fs-nav-next" id="fsNext" title="下一个">
+        <button class="fs-nav fs-nav-next" title="下一个">
+          <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+
+      </div><!-- /panels -->
+    </section>
+
+    <!-- ══ SECTION 3: QWEN COMPARISON ══ -->
+    <section class="section" id="sec3">
+      <div class="sec2-header">
+        <span class="sec2-header-title">Qwen3.6-Plus 生成对比</span>
+      </div>
+
+      <div class="panels" id="panels-sec3">
+
+        <!-- Qwen-ChatGPT Panel -->
+        <div class="panel" id="panel-qwen-chatgpt">
+          <div class="panel-bar">
+            <span class="panel-label"><span class="dot"></span>ChatGPT 文本</span>
+          </div>
+          <button class="fs-btn" data-panel="panel-qwen-chatgpt" title="全屏 / 还原">
+            <svg id="icon-qwen-chatgpt" viewBox="0 0 24 24">
+              <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+          </button>
+          <div class="panel-iframe-wrap">
+            <iframe id="iframe-qwen-chatgpt" src="resources/Qwen3.6-Plus_ChatGPT文本_网页.html" title="Qwen-ChatGPT"></iframe>
+          </div>
+        </div>
+
+        <!-- Qwen-Claude Panel -->
+        <div class="panel" id="panel-qwen-claude">
+          <div class="panel-bar">
+            <span class="panel-label"><span class="dot"></span>Claude 文本</span>
+          </div>
+          <button class="fs-btn" data-panel="panel-qwen-claude" title="全屏 / 还原">
+            <svg id="icon-qwen-claude" viewBox="0 0 24 24">
+              <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+          </button>
+          <div class="panel-iframe-wrap">
+            <iframe id="iframe-qwen-claude" src="resources/Qwen3.6-Plus_Claude文本_网页.html" title="Qwen-Claude"></iframe>
+          </div>
+        </div>
+
+        <!-- Qwen-Gemini Panel -->
+        <div class="panel" id="panel-qwen-gemini">
+          <div class="panel-bar">
+            <span class="panel-label"><span class="dot"></span>Gemini 文本</span>
+          </div>
+          <button class="fs-btn" data-panel="panel-qwen-gemini" title="全屏 / 还原">
+            <svg id="icon-qwen-gemini" viewBox="0 0 24 24">
+              <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+          </button>
+          <div class="panel-iframe-wrap">
+            <iframe id="iframe-qwen-gemini" src="resources/Qwen3.6-Plus_Gemini文本_网页.html" title="Qwen-Gemini"></iframe>
+          </div>
+        </div>
+
+        <!-- Fullscreen nav arrows -->
+        <button class="fs-nav fs-nav-prev" title="上一个">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="fs-nav fs-nav-next" title="下一个">
           <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
         </button>
 
@@ -418,7 +487,7 @@
 // ════════════════════════════════════════════════
 //  State
 // ════════════════════════════════════════════════
-const SECTIONS      = 2;          // total number of sections
+const SECTIONS      = 3;          // total number of sections
 let currentSection  = 0;
 let isAnimating     = false;
 const ANIM_DURATION = 700;        // ms, matches CSS transition
@@ -495,7 +564,7 @@ dots.forEach(d => {
 });
 
 // ─── iframes ───────────────────────────────────
-const iframeIds  = ['iframe-chatgpt', 'iframe-claude', 'iframe-gemini'];
+const iframeIds  = ['iframe-chatgpt', 'iframe-claude', 'iframe-gemini', 'iframe-qwen-chatgpt', 'iframe-qwen-claude', 'iframe-qwen-gemini'];
 const iframeEls  = iframeIds.map(id => document.getElementById(id));
 
 const HIDE_SCROLLBAR_CSS = `
@@ -552,7 +621,7 @@ function attachIframeListeners(iframe) {
       if (delta > 0 && maxScroll > 0 && scrollY >= maxScroll - 8) {
         // At bottom, continuing to scroll down → next section
         e.preventDefault();
-        // Currently no section beyond 2, so nothing happens
+        if (currentSection < SECTIONS - 1) goToSection(currentSection + 1);
       } else if (delta < 0 && scrollY <= 4) {
         // At top, continuing to scroll up → previous section
         e.preventDefault();
@@ -594,14 +663,18 @@ iframeEls.forEach(iframe => {
 });
 
 // ─── Panel order & fullscreen helpers ───────────
-const panelOrder = ['panel-chatgpt', 'panel-claude', 'panel-gemini'];
+function getPanelsInContainer(container) {
+  return Array.from(container.querySelectorAll('.panel')).map(p => p.id);
+}
 
 function switchFullscreenPanel(targetId) {
   if (!activeFsPanel || !targetId) return;
   const targetEl = document.getElementById(targetId);
   if (!targetEl) return;
+  
+  const container = targetEl.closest('.panels');
 
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active-fs'));
+  container.querySelectorAll('.panel').forEach(p => p.classList.remove('active-fs'));
   targetEl.classList.add('active-fs');
   activeFsPanel = targetId;
 
@@ -610,40 +683,51 @@ function switchFullscreenPanel(targetId) {
       btn.dataset.panel === targetId ? collapseIcon : expandIcon;
   });
 
-  updateFsNav();
+  updateFsNav(container);
 }
 
-function updateFsNav() {
-  const idx = panelOrder.indexOf(activeFsPanel);
-  document.getElementById('fsPrev').style.visibility = (activeFsPanel && idx > 0) ? 'visible' : 'hidden';
-  document.getElementById('fsNext').style.visibility = (activeFsPanel && idx < panelOrder.length - 1) ? 'visible' : 'hidden';
+function updateFsNav(container) {
+  if (!container) return;
+  const panelsOrder = getPanelsInContainer(container);
+  const idx = panelsOrder.indexOf(activeFsPanel);
+  
+  const prevBtn = container.querySelector('.fs-nav-prev');
+  const nextBtn = container.querySelector('.fs-nav-next');
+  
+  if (prevBtn) prevBtn.style.visibility = (activeFsPanel && idx > 0) ? 'visible' : 'hidden';
+  if (nextBtn) nextBtn.style.visibility = (activeFsPanel && idx < panelsOrder.length - 1) ? 'visible' : 'hidden';
 }
 
 // ─── Keyboard navigation ───────────────────────
 window.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowDown' || e.key === 'PageDown') {
     e.preventDefault();
-    if (currentSection === 0) goToSection(1);
+    if (currentSection < SECTIONS - 1) goToSection(currentSection + 1);
   }
   if (e.key === 'ArrowUp' || e.key === 'PageUp') {
     e.preventDefault();
-    if (currentSection === 1) goToSection(0);
+    if (currentSection > 0) goToSection(currentSection - 1);
   }
   // Left/Right arrows switch fullscreen panel
   if (e.key === 'ArrowLeft' && activeFsPanel) {
     e.preventDefault();
-    const idx = panelOrder.indexOf(activeFsPanel);
-    if (idx > 0) switchFullscreenPanel(panelOrder[idx - 1]);
+    const panelEl = document.getElementById(activeFsPanel);
+    const container = panelEl.closest('.panels');
+    const panelsOrder = getPanelsInContainer(container);
+    const idx = panelsOrder.indexOf(activeFsPanel);
+    if (idx > 0) switchFullscreenPanel(panelsOrder[idx - 1]);
   }
   if (e.key === 'ArrowRight' && activeFsPanel) {
     e.preventDefault();
-    const idx = panelOrder.indexOf(activeFsPanel);
-    if (idx < panelOrder.length - 1) switchFullscreenPanel(panelOrder[idx + 1]);
+    const panelEl = document.getElementById(activeFsPanel);
+    const container = panelEl.closest('.panels');
+    const panelsOrder = getPanelsInContainer(container);
+    const idx = panelsOrder.indexOf(activeFsPanel);
+    if (idx < panelsOrder.length - 1) switchFullscreenPanel(panelsOrder[idx + 1]);
   }
 });
 
 // ─── Fullscreen panel toggle ───────────────────
-const panels = document.getElementById('panels');
 let activeFsPanel = null;
 
 // Icons
@@ -655,41 +739,57 @@ document.querySelectorAll('.fs-btn').forEach(btn => {
     e.stopPropagation();
     const panelId = btn.dataset.panel;
     const panelEl = document.getElementById(panelId);
+    const container = panelEl.closest('.panels');
 
     if (activeFsPanel === panelId) {
       // Exit fullscreen
-      panels.classList.remove('fullscreen');
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active-fs'));
+      container.classList.remove('fullscreen');
+      container.querySelectorAll('.panel').forEach(p => p.classList.remove('active-fs'));
       document.querySelectorAll('.fs-btn svg').forEach(svg => { svg.innerHTML = expandIcon; });
       activeFsPanel = null;
-      updateFsNav();
+      
+      const prevBtn = container.querySelector('.fs-nav-prev');
+      const nextBtn = container.querySelector('.fs-nav-next');
+      if (prevBtn) prevBtn.style.visibility = 'hidden';
+      if (nextBtn) nextBtn.style.visibility = 'hidden';
     } else {
-      // Enter fullscreen for this panel
-      panels.classList.add('fullscreen');
+      // Clear any other fullscreen container
+      document.querySelectorAll('.panels').forEach(p => p.classList.remove('fullscreen'));
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active-fs'));
+
+      // Enter fullscreen for this panel
+      container.classList.add('fullscreen');
       panelEl.classList.add('active-fs');
       activeFsPanel = panelId;
       // Update icons
       document.querySelectorAll('.fs-btn svg').forEach(svg => { svg.innerHTML = expandIcon; });
       btn.querySelector('svg').innerHTML = collapseIcon;
-      updateFsNav();
+      updateFsNav(container);
     }
   });
 });
 
 // ─── Fullscreen panel switching (arrows) ────────
-document.getElementById('fsPrev').addEventListener('click', (e) => {
-  e.stopPropagation();
-  const idx = panelOrder.indexOf(activeFsPanel);
-  if (idx <= 0) return;
-  switchFullscreenPanel(panelOrder[idx - 1]);
+document.querySelectorAll('.fs-nav-prev').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const container = btn.closest('.panels');
+    const panelsOrder = getPanelsInContainer(container);
+    const idx = panelsOrder.indexOf(activeFsPanel);
+    if (idx <= 0) return;
+    switchFullscreenPanel(panelsOrder[idx - 1]);
+  });
 });
 
-document.getElementById('fsNext').addEventListener('click', (e) => {
-  e.stopPropagation();
-  const idx = panelOrder.indexOf(activeFsPanel);
-  if (idx < 0 || idx >= panelOrder.length - 1) return;
-  switchFullscreenPanel(panelOrder[idx + 1]);
+document.querySelectorAll('.fs-nav-next').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const container = btn.closest('.panels');
+    const panelsOrder = getPanelsInContainer(container);
+    const idx = panelsOrder.indexOf(activeFsPanel);
+    if (idx < 0 || idx >= panelsOrder.length - 1) return;
+    switchFullscreenPanel(panelsOrder[idx + 1]);
+  });
 });
 
 // ─── Touch / swipe support ─────────────────────
@@ -700,7 +800,7 @@ window.addEventListener('touchmove', e => {
   const dy = touchStartY - e.touches[0].clientY;
   if (Math.abs(dy) < 8) return;
   touchStartY = e.touches[0].clientY;
-  if (currentSection === 0 && dy > 0) goToSection(1);
+  if (currentSection < SECTIONS - 1 && dy > 0) goToSection(currentSection + 1);
   else if (currentSection > 0 && dy < 0) goToSection(currentSection - 1);
 }, { passive: true });
 </script>
