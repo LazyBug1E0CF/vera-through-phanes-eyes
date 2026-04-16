@@ -66,7 +66,6 @@
     text-align: center;
     color: #fff;
     padding: 2rem;
-    max-width: 1000px;
   }
 
   .hero-label {
@@ -94,6 +93,18 @@
     margin-bottom: 1.25rem;
   }
 
+  .hero-models {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    letter-spacing: 0.1em;
+  }
+
+  .model-chatgpt { color: #10a37f; }
+  .model-claude  { color: #cc785c; }
+  .model-gemini  { color: #4285f4; }
+  .model-qwen    { color: #615ced; }
+
   .hero-prompt {
     font-size: clamp(0.85rem, 2vw, 1rem);
     color: rgba(255,255,255,0.45);
@@ -104,7 +115,6 @@
     border-radius: 12px;
     padding: 0.75rem 1.25rem;
     display: inline-block;
-    max-width: 90%;
   }
 
   .hero-scroll-hint {
@@ -150,9 +160,9 @@
   }
 
   /* ──────────────────────────────
-     SECTION 2 & 3 — COMPARISON
-  ────────────────────────────── */
-  #sec2, #sec3 {
+      SECTION 2, 3 & 4 — COMPARISON
+   ────────────────────────────── */
+  #sec2, #sec3, #sec4 {
     background: #0a0a18;
     display: flex;
     flex-direction: column;
@@ -334,7 +344,8 @@
 <div id="nav-dots">
   <div class="nav-dot active" data-target="0" title="序章"></div>
   <div class="nav-dot" data-target="1" title="模型对比"></div>
-  <div class="nav-dot" data-target="2" title="Qwen生成对比"></div>
+  <div class="nav-dot" data-target="2" title="Qwen 生成对比"></div>
+  <div class="nav-dot" data-target="3" title="Gemini 文本 vs 文件对比"></div>
 </div>
 
 <!-- Main stage -->
@@ -351,7 +362,8 @@
       <div class="hero-inner">
         <p class="hero-label">Genshin Impact · Literary Analysis</p>
         <h1 class="hero-title">法大王眼中的少女薇拉</h1>
-        <p class="hero-subtitle">对比各大模型对《少女薇拉的忧郁》的研究</p>
+        <p class="hero-subtitle">对比大模型们对《少女薇拉的忧郁》的研究</p>
+        <p class="hero-models"><span class="model-chatgpt">ChatGPT 5.4</span> · <span class="model-claude">Claude Sonnet 4.6</span> · <span class="model-gemini">Gemini 3.1 Pro</span> · <span class="model-qwen">Qwen3.6-Plus</span></p>
         <div class="hero-prompt">
           提示词：原神中的《少女薇拉的忧郁》讲了怎样的故事？截至目前最新版本又补充了两个章节，不要遗漏掉
         </div>
@@ -496,6 +508,57 @@
       </div><!-- /panels -->
     </section>
 
+    <!-- ══ SECTION 4: QWEN GEMINI COMPARISON ══ -->
+    <section class="section" id="sec4">
+      <div class="sec2-header">
+        <span class="sec2-header-title">Qwen3.6-Plus：Gemini 文本 vs 文件对比</span>
+      </div>
+
+      <div class="panels" id="panels-sec4">
+
+        <!-- Qwen-Gemini 文本 Panel -->
+        <div class="panel" id="panel-qwen-gemini-text">
+          <div class="panel-bar">
+            <span class="panel-label"><span class="dot"></span>Gemini 文本</span>
+          </div>
+          <button class="fs-btn" data-panel="panel-qwen-gemini-text" title="全屏 / 还原">
+            <svg id="icon-qwen-gemini-text" viewBox="0 0 24 24">
+              <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+          </button>
+          <div class="panel-iframe-wrap">
+            <iframe id="iframe-qwen-gemini-text" src="resources/Qwen3.6-Plus_Gemini文本_网页.html" title="Qwen-Gemini 文本"></iframe>
+          </div>
+        </div>
+
+        <!-- Qwen-Gemini 文件 Panel -->
+        <div class="panel" id="panel-qwen-gemini-file">
+          <div class="panel-bar">
+            <span class="panel-label"><span class="dot"></span>Gemini 文件</span>
+          </div>
+          <button class="fs-btn" data-panel="panel-qwen-gemini-file" title="全屏 / 还原">
+            <svg id="icon-qwen-gemini-file" viewBox="0 0 24 24">
+              <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+          </button>
+          <div class="panel-iframe-wrap">
+            <iframe id="iframe-qwen-gemini-file" src="resources/Qwen3.6-Plus_Gemini文件_网页.html" title="Qwen-Gemini 文件"></iframe>
+          </div>
+        </div>
+
+        <!-- Fullscreen nav arrows -->
+        <button class="fs-nav fs-nav-prev" title="上一个">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="fs-nav fs-nav-next" title="下一个">
+          <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+
+      </div><!-- /panels -->
+    </section>
+
   </div><!-- /sections-wrap -->
 </div><!-- /stage -->
 
@@ -503,7 +566,7 @@
 // ════════════════════════════════════════════════
 //  State
 // ════════════════════════════════════════════════
-const SECTIONS      = 3;          // total number of sections
+const SECTIONS      = 4;          // total number of sections
 let currentSection  = 0;
 let isAnimating     = false;
 const ANIM_DURATION = 700;        // ms, matches CSS transition
@@ -580,12 +643,23 @@ dots.forEach(d => {
 });
 
 // ─── iframes ───────────────────────────────────
-const iframeIds  = ['iframe-chatgpt', 'iframe-claude', 'iframe-gemini', 'iframe-qwen-chatgpt', 'iframe-qwen-claude', 'iframe-qwen-gemini'];
+const iframeIds  = ['iframe-chatgpt', 'iframe-claude', 'iframe-gemini', 'iframe-qwen-chatgpt', 'iframe-qwen-claude', 'iframe-qwen-gemini', 'iframe-qwen-gemini-text', 'iframe-qwen-gemini-file'];
 const iframeEls  = iframeIds.map(id => document.getElementById(id));
 
 const HIDE_SCROLLBAR_CSS = `
   ::-webkit-scrollbar { display: none !important; }
   * { scrollbar-width: none !important; }
+`;
+
+const PREVENT_SCROLL_INTO_VIEW_SCRIPT = `
+  (function() {
+    var origScrollIntoView = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function(options) {
+      var rect = this.getBoundingClientRect();
+      var scrollAmount = rect.top + window.scrollY;
+      window.scrollTo({ top: scrollAmount, behavior: (options && options.behavior === 'smooth') ? 'smooth' : 'auto' });
+    };
+  })();
 `;
 
 function injectHideScrollbar(iframe) {
@@ -595,6 +669,16 @@ function injectHideScrollbar(iframe) {
     const style = doc.createElement('style');
     style.textContent = HIDE_SCROLLBAR_CSS;
     (doc.head || doc.documentElement).appendChild(style);
+  } catch(e) {}
+}
+
+function injectPreventScrollIntoView(iframe) {
+  try {
+    const doc = iframe.contentDocument;
+    if (!doc) return;
+    const script = doc.createElement('script');
+    script.textContent = PREVENT_SCROLL_INTO_VIEW_SCRIPT;
+    (doc.head || doc.documentElement).appendChild(script);
   } catch(e) {}
 }
 
@@ -673,6 +757,7 @@ function interceptAnchorClicks(iframe) {
 iframeEls.forEach(iframe => {
   iframe.addEventListener('load', () => {
     injectHideScrollbar(iframe);
+    injectPreventScrollIntoView(iframe);
     attachIframeListeners(iframe);
     interceptAnchorClicks(iframe);
   });
